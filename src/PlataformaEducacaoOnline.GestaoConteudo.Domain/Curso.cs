@@ -5,21 +5,17 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
 {
     public class Curso : Entity, IAggregateRoot
     {
-
         public string Nome { get; private set; }
-
         public ConteudoProgramatico ConteudoProgramatico { get; private set; }
 
-        public Guid UsuarioId { get; private set; }
+        private readonly List<Aula> _aulas;
+        public IReadOnlyCollection<Aula> Aulas => _aulas;
 
-        public ICollection<Aula> Aulas { get; set; }
-
-        public Curso(string nome, ConteudoProgramatico conteudoProgramatico, Guid usuarioId)
+        public Curso(string nome, ConteudoProgramatico conteudoProgramatico)
         {
             Nome = nome;
             ConteudoProgramatico = conteudoProgramatico;
-            UsuarioId = usuarioId;
-            Aulas = new List<Aula>();
+            _aulas = new List<Aula>();
 
             Validar();
         }
@@ -27,10 +23,16 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
         public void AdicionarAula(Aula aula)
         {
             aula.VincularCurso(Id);
-            Aulas.Add(aula);
+            _aulas.Add(aula);
         }
 
-        public void Validar() { }
+        public void Validar()
+        {
+            if (string.IsNullOrEmpty(Nome))
+                throw new DomainException("O nome do curso é obrigatório.");
+            if (ConteudoProgramatico == null)
+                throw new DomainException("O conteúdo programático é obrigatório.");
+        }
 
     }
 }

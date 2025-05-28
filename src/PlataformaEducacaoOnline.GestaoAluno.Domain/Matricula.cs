@@ -12,7 +12,7 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
         public Guid CursoId { get; private set; }
         public Guid AlunoId { get; private set; }
 
-        public StatusMatricula StatusMatricula { get; set; }
+        public StatusMatricula StatusMatricula { get; private set; }
 
         public Matricula(Guid cursoId, Guid alunoId)
         {
@@ -20,9 +20,21 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
             AlunoId = alunoId;
 
             Validar();
+            InicioMatricula();
         }
 
-        public void Validar() { }
+        public void Validar()
+        {
+            if (CursoId == Guid.Empty)
+                throw new DomainException("CursoId não pode ser vazio.");
+            if (AlunoId == Guid.Empty)
+                throw new DomainException("AlunoId não pode ser vazio.");
+        }
+
+        public void InicioMatricula()
+        {
+            StatusMatricula = StatusMatricula.Inicio;
+        }
 
         public void AtivarMatricula()
         {
@@ -33,7 +45,5 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
         {
             StatusMatricula = StatusMatricula.PendentePagamento;
         }
-
-
     }
 }

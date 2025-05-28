@@ -8,7 +8,9 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
 {
     public enum StatusMatricula
     {
+        Inicio = 0,
         Ativa = 1,
-        PendentePagamento = 2
+        PendentePagamento = 2,
+        Concluido = 3
     }
 }

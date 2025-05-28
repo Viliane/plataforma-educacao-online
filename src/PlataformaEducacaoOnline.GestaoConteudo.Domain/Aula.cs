@@ -14,6 +14,9 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
         public string Material { get; private set; }
         public Guid CursoId { get; private set; }
 
+        //EF
+        public Curso Curso { get; private set; }
+
         public Aula(string titulo, string conteudoAula, string material)
         {
             Titulo = titulo;
