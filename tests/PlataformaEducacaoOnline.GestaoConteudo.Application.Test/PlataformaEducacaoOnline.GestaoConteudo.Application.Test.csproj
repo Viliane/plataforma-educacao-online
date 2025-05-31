@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\PlataformaEducacaoOnline.GestaoConteudo.Domain\PlataformaEducacaoOnline.GestaoConteudo.Domain.csproj" />
+    <ProjectReference Include="..\..\src\PlataformaEducacaoOnline.GestaoConteudo.Application\PlataformaEducacaoOnline.GestaoConteudo.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
