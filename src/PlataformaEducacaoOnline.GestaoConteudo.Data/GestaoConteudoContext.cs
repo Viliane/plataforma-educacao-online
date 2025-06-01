@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using PlataformaEducacaoOnline.Core.Data;
+using PlataformaEducacaoOnline.Core.DomainObjects;
 using PlataformaEducacaoOnline.GestaoConteudo.Domain;
 using System;
 using System.Collections.Generic;
@@ -11,8 +13,11 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data
 {
     public class GestaoConteudoContext : DbContext, IUnitOfWork
     {
-        public GestaoConteudoContext(DbContextOptions<GestaoConteudoContext> options) : base(options)
+        private readonly IMediator _mediator;
+
+        public GestaoConteudoContext(DbContextOptions<GestaoConteudoContext> options, IMediator mediator) : base(options)
         {
+            _mediator = mediator;
         }
 
         public DbSet<Curso> Cursos { get; set; }
@@ -20,7 +25,10 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data
 
         public async Task<bool> Commit()
         {
-            return await base.SaveChangesAsync() > 0;
+            var sucesso = await base.SaveChangesAsync() > 0;
+            if (sucesso) await _mediator.PublicarEventos(this);
+
+            return sucesso;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +40,29 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(GestaoConteudoContext).Assembly);
+        }
+    }
+
+    public static class MediatorExtension
+    {
+        public static async Task PublicarEventos(this IMediator mediator, DbContext context)
+        {
+            var domainEntities = context.ChangeTracker
+                .Entries<Entity>()
+                .Where(x => x.Entity.Notificacoes != null && x.Entity.Notificacoes.Any())
+                .Select(x => x.Entity)
+                .ToList();
+
+            var domainEvents = domainEntities.SelectMany(x => x.Notificacoes).ToList();
+
+            domainEntities.ForEach(entity => entity.LimparEventos());
+
+            var tasks = domainEvents.Select(async (domainEvent) =>
+            {
+                await mediator.Publish(domainEvent);
+            });
+
+            await Task.WhenAll(tasks);
         }
     }
 }
