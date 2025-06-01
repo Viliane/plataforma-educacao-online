@@ -15,6 +15,8 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
         // EF
         public Aula Aula { get; private set; } = null!;
 
+        protected Material() { }
+
         public Material(string nome)
         {
             Nome = nome;

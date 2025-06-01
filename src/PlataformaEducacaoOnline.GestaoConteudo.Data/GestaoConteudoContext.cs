@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PlataformaEducacaoOnline.Core.Data;
 using PlataformaEducacaoOnline.Core.DomainObjects;
+using PlataformaEducacaoOnline.Core.Messages;
 using PlataformaEducacaoOnline.GestaoConteudo.Domain;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data
         public DbSet<Curso> Cursos { get; set; }
         public DbSet<Aula> Aulas { get; set; }
 
+        public DbSet<Material> Materiais { get; set; }
+
         public async Task<bool> Commit()
         {
             var sucesso = await base.SaveChangesAsync() > 0;
@@ -37,9 +40,12 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data
                      .SelectMany(e => e.GetProperties()
                          .Where(p => p.ClrType == typeof(string))))
                 property.SetColumnType("varchar(200)");
+            
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GestaoConteudoContext).Assembly);
+
+            modelBuilder.Ignore<Event>();
 
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GestaoConteudoContext).Assembly);
         }
     }
 

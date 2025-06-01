@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlataformaEducacaoOnline.Api.Data;
+using PlataformaEducacaoOnline.GestaoConteudo.Data;
 using System;
 
 namespace PlataformaEducacaoOnline.Api.Configurations
@@ -14,10 +15,20 @@ namespace PlataformaEducacaoOnline.Api.Configurations
                 {
                     opt.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
                 });
+
+                builder.Services.AddDbContext<GestaoConteudoContext>(opt =>
+                {
+                    opt.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
+                });
             }
             else
             {
                 builder.Services.AddDbContext<AppDbContext>(opt =>
+                {
+                    opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
+                });
+
+                builder.Services.AddDbContext<GestaoConteudoContext>(opt =>
                 {
                     opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
                 });

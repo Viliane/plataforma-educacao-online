@@ -15,6 +15,8 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
         private readonly List<Aula> _aulas;
         public IReadOnlyCollection<Aula> Aulas => _aulas;
 
+        protected Curso() { }
+
         public Curso(string nome, Guid usuarioId, ConteudoProgramatico conteudoProgramatico)
         {
             Nome = nome;
