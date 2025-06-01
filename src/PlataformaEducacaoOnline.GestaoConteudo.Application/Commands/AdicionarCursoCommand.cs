@@ -19,14 +19,14 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands
 
         public override bool EhValido()
         {
-            ValidationResult = new AdicionarAulaCommandValidation().Validate(this);
+            ValidationResult = new AdicionarCursoCommandValidation().Validate(this);
             return ValidationResult.IsValid;
         }
     }
 
-    public class AdicionarAulaCommandValidation : AbstractValidator<AdicionarCursoCommand>
+    public class AdicionarCursoCommandValidation : AbstractValidator<AdicionarCursoCommand>
     {
-        public AdicionarAulaCommandValidation()
+        public AdicionarCursoCommandValidation()
         {
             RuleFor(c => c.Nome)
                 .NotEmpty().WithMessage("O nome do curso é obrigatório.")

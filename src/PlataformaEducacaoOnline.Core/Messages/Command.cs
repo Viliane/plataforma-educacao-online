@@ -15,6 +15,6 @@ namespace PlataformaEducacaoOnline.Core.Messages
             Timestamp = DateTime.Now;
         }
 
-        public abstract bool EhValido();
+        public abstract bool EhValido(); 
     }
 }
