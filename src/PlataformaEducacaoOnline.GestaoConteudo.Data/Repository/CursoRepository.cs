@@ -40,6 +40,11 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data.Repository
             return await _context.Cursos.AsNoTracking().ToListAsync();
         }
 
+        public async Task<IEnumerable<Aula>> ObterAulasPorCursoId(Guid cursoId)
+        {
+            return await _context.Aulas.AsNoTracking().Where(a => a.CursoId == cursoId).ToListAsync();
+        }
+
         public void Adicionar(Curso curso)
         {
             _context.Cursos.Add(curso);

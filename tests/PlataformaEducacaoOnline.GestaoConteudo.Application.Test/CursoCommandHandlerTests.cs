@@ -14,7 +14,7 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Test
         {
             // Arrange
             var usuarioId = Guid.NewGuid();
-            var cursoCommand = new AdicionarCursoCommand("Curso de Teste", usuarioId, "Conteúdo Programático de Teste");
+            var cursoCommand = new AdicionarCursoCommand("Curso de Teste", usuarioId, "Conteúdo Programático de Teste", 200);
 
             var mocker = new AutoMocker();
             var cursoHandler = mocker.CreateInstance<CursoCommandHandler>();

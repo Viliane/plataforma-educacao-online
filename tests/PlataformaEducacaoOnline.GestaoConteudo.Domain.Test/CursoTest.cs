@@ -9,7 +9,7 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain.Test
         public void Validar_AdicionarNovoCurso_DeveRetornarDomainException()
         {
             // AAA
-            Assert.Throws<DomainException>(() => new Curso(string.Empty, Guid.Empty, new ConteudoProgramatico(string.Empty)));
+            Assert.Throws<DomainException>(() => new Curso(string.Empty, Guid.Empty, new ConteudoProgramatico(string.Empty), 0));
         }        
     }
 }

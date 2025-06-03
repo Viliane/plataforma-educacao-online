@@ -2,6 +2,7 @@
 using PlataformaEducacaoOnline.Core.DomainObjects;
 using PlataformaEducacaoOnline.Core.Messages;
 using PlataformaEducacaoOnline.GestaoConteudo.Application.Events;
+using PlataformaEducacaoOnline.GestaoConteudo.Data.Repository;
 using PlataformaEducacaoOnline.GestaoConteudo.Domain;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,9 @@ using System.Threading.Tasks;
 
 namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands
 {
-    public class CursoCommandHandler : IRequestHandler<AdicionarCursoCommand, bool>
+    public class CursoCommandHandler : IRequestHandler<AdicionarCursoCommand, bool>,
+        IRequestHandler<AtualizarCursoCommand, bool>,
+        IRequestHandler<RemoverCursoCommand, bool>
     {
         private readonly ICursoRepositoty _cursoRepository;
         private readonly IMediator _mediator;
@@ -27,13 +30,65 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands
             if (!ValidarComando(message))
                 return false;
 
-            var curso = new Curso(message.Nome, message.UsuarioId, message.ConteudoProgramatico);
+            var curso = new Curso(message.Nome, message.UsuarioId, message.ConteudoProgramatico, message.Valor);
             _cursoRepository.Adicionar(curso);
 
-            curso.AdicionarEvento(new CursoAdicionadoEvent(curso.Id, curso.UsuarioId, curso.Nome, curso.ConteudoProgramatico.DescricaoConteudoProgramatico));
+            curso.AdicionarEvento(new CursoAdicionadoEvent(curso.Id, curso.UsuarioId, curso.Nome, curso.ConteudoProgramatico.DescricaoConteudoProgramatico, curso.Valor));
 
             return await _cursoRepository.UnitOfWork.Commit();
-        } 
+        }
+
+        public async Task<bool> Handle(AtualizarCursoCommand message, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(message))
+                return false;
+
+            var curso = await _cursoRepository.ObterCursoPorId(message.CursoId);
+
+            if (curso is null)
+            {
+                await _mediator.Publish(new DomainNotification(message.MessageType, "Curso não encontrado."), cancellationToken);
+                return false;
+            }
+ 
+            curso.AtualizarNome(message.Nome);
+            curso.AtualizarConteudoProgramatico(message.ConteudoProgramatico);
+            curso.AtualizarDataAtualizacao();
+            curso.AtualizarValor(message.Valor);
+
+            _cursoRepository.Atualizar(curso);
+
+            curso.AdicionarEvento(new CursoAtualizadoEvent(curso.Id, curso.UsuarioId, curso.Nome, curso.ConteudoProgramatico.DescricaoConteudoProgramatico, curso.Valor));
+
+            return await _cursoRepository.UnitOfWork.Commit();
+        }
+
+        public async Task<bool> Handle(RemoverCursoCommand message, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(message))
+                return false;
+
+            var curso = await _cursoRepository.ObterCursoPorId(message.CursoId);
+            var aulas = await _cursoRepository.ObterAulasPorCursoId(message.CursoId);
+
+            if (curso is null)
+            {
+                await _mediator.Publish(new DomainNotification(message.MessageType, "Curso não encontrado."), cancellationToken);
+                return false;
+            }
+
+            if (aulas.Any())
+            {
+                await _mediator.Publish(new DomainNotification(message.MessageType, "Curso não pode ser removido pois existe aulas vinculadas a ele."), cancellationToken);
+                return false;
+            }
+
+            _cursoRepository.Remover(curso);
+
+            curso.AdicionarEvento(new CursoRemovidoEvent(curso.Id, curso.UsuarioId, curso.Nome, curso.ConteudoProgramatico.DescricaoConteudoProgramatico, curso.Valor));
+
+            return await _cursoRepository.UnitOfWork.Commit();
+        }
 
         private bool ValidarComando(Command message)
         {
