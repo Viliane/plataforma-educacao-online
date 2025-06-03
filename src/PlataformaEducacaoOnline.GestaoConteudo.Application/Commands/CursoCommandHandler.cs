@@ -51,10 +51,10 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands
                 return false;
             }
  
-            curso.AtualizarNome(message.Nome);
-            curso.AtualizarConteudoProgramatico(message.ConteudoProgramatico);
+            if (message.Nome.Trim() != curso.Nome.Trim()) curso.AtualizarNome(message.Nome);
+            if (message.ConteudoProgramatico.DescricaoConteudoProgramatico != curso.ConteudoProgramatico.DescricaoConteudoProgramatico) curso.AtualizarConteudoProgramatico(message.ConteudoProgramatico);
             curso.AtualizarDataAtualizacao();
-            curso.AtualizarValor(message.Valor);
+            if (message.Valor != curso.Valor) curso.AtualizarValor(message.Valor);
 
             _cursoRepository.Atualizar(curso);
 
