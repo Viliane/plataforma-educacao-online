@@ -24,6 +24,12 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
             Validar();
         }
 
+        public Material(Guid id, string nome, Guid aulaId) : this(nome)
+        {
+            Id = id;
+            VincularMaterial(aulaId);
+        }
+
         public void VincularMaterial(Guid aulaId)
         {
             AulaId = aulaId;

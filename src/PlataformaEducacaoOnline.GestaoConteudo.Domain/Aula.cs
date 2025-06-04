@@ -31,11 +31,6 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
             Validar();
         }
 
-        //public void VincularCurso(Guid cursoId)
-        //{
-        //    CursoId = cursoId;
-        //}
-
         public void AdicionarMaterial(Material material)
         {
             if (MaterialExistente(material))
@@ -45,9 +40,19 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
             _materiais.Add(material);
         }
 
+        public void AtualizarTitulo(string titulo)
+        {
+            Titulo = titulo;
+        }
+
+        public void AtualizarConteudo(string conteudo)
+        {
+            Conteudo = conteudo;
+        }
+
         private bool MaterialExistente(Material material)
         {
-            return _materiais.Any(m => m.Id == material.Id);
+            return _materiais.Any(m => m.Nome == material.Nome);
         }
 
         public void Validar()

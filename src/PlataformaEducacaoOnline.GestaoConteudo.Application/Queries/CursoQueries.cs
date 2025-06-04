@@ -43,20 +43,33 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Queries
             });
         }
 
-        //public async Task<AulaDto?> ObterAulaPorId(Guid aulaId)
-        //{
-        //    var aula = await _cursoRepository.ObterAulaPorId(aulaId);
-        //    return aula == null ? null : new AulaDto { Titulo = aula.Titulo, Descricao = aula.Descricao, Duracao = aula.Duracao };
-        //}
-        //public async Task<IEnumerable<AulaDto>> ObterAulasPorCursoId(Guid cursoId)
-        //{
-        //    var aulas = await _cursoRepository.ObterAulasPorCursoId(cursoId);
-        //    return aulas.Select(a => new AulaDto { Titulo = a.Titulo, Descricao = a.Descricao, Duracao = a.Duracao });
-        //}
-        //public async Task<IEnumerable<AulaDto>> ObterTodasAulas()
-        //{
-        //    var aulas = await _cursoRepository.ObterTodasAulas();
-        //    return aulas.Select(a => new AulaDto { Titulo = a.Titulo, Descricao = a.Descricao, Duracao = a.Duracao });
-        //}
+        public async Task<AulaQueryDto?> ObterAulaPorId(Guid aulaId)
+        {
+            var aula = await _cursoRepository.ObterAulaPorId(aulaId);
+            if (aula is null) return null;
+
+            var materiais = await _cursoRepository.ObterMateriaisPorAulaId(aulaId);
+            return new AulaQueryDto
+            {
+                Id = aula.Id,
+                Titulo = aula.Titulo,
+                Conteudo = aula.Conteudo,
+                CursoId = aula.CursoId,
+                Materiais = materiais.Select(m => new Material(m.Id, m.Nome, m.AulaId)).ToList()
+            };
+        }
+
+        public Task<IEnumerable<AulaQueryDto>> ObterTodasAulas()
+        {
+            var aulas = _cursoRepository.ObterTodasAulas();
+            return aulas.ContinueWith(task => task.Result.Select(aula => new AulaQueryDto
+            {
+                Id = aula.Id,
+                Titulo = aula.Titulo,
+                Conteudo = aula.Conteudo,
+                CursoId = aula.CursoId,
+                Materiais = _cursoRepository.ObterMateriaisPorAulaId(aula.Id).Result.Select(m => new Material(m.Id, m.Nome, m.AulaId)).ToList()
+            }));
+        }
     }
 }

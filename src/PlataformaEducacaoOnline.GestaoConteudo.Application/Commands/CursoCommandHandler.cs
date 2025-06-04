@@ -2,13 +2,7 @@
 using PlataformaEducacaoOnline.Core.DomainObjects;
 using PlataformaEducacaoOnline.Core.Messages;
 using PlataformaEducacaoOnline.GestaoConteudo.Application.Events;
-using PlataformaEducacaoOnline.GestaoConteudo.Data.Repository;
 using PlataformaEducacaoOnline.GestaoConteudo.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands
 {
