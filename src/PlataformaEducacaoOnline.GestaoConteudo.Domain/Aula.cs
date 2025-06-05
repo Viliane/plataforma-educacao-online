@@ -42,11 +42,17 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
 
         public void AtualizarTitulo(string titulo)
         {
+            if (string.IsNullOrEmpty(titulo))
+                throw new DomainException("O título da aula é obrigatório.");
+
             Titulo = titulo;
         }
 
         public void AtualizarConteudo(string conteudo)
         {
+            if (string.IsNullOrEmpty(conteudo))
+                throw new DomainException("O conteúdo da aula é obrigatório.");
+
             Conteudo = conteudo;
         }
 

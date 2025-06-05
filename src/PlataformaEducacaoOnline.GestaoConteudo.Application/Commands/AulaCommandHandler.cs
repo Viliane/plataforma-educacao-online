@@ -13,8 +13,8 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands
 {
     public class AulaCommandHandler : IRequestHandler<AdicionarAulaCommand, bool>,
         IRequestHandler<AtualizarAulaCommand, bool>,
-        IRequestHandler<RemoverAulaCommand, bool>
-
+        IRequestHandler<RemoverAulaCommand, bool>,
+        IRequestHandler<RemoverMaterialAulaCommand, bool>
     {
         private readonly ICursoRepositoty _cursoRepository;
         private readonly IMediator _mediator;
@@ -100,6 +100,26 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands
             return await _cursoRepository.UnitOfWork.Commit();
         }
 
+        public async Task<bool> Handle(RemoverMaterialAulaCommand message, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(message))
+                return false;
+
+            var material = await _cursoRepository.ObterMaterialPorId(message.MaterialId);
+            
+
+            if (material is null)
+            {
+                await _mediator.Publish(new DomainNotification(message.MessageType, "Material não encontrado."), cancellationToken);
+                return false;
+            }
+
+            _cursoRepository.Remover(material);
+
+            material.AdicionarEvento(new MaterialAulaRemovidaEvent(material.Id, material.Nome, material.AulaId));
+
+            return await _cursoRepository.UnitOfWork.Commit();
+        }
 
         private bool ValidarComando(Command message)
         {

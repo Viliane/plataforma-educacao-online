@@ -61,6 +61,15 @@ namespace PlataformaEducacaoOnline.Api.Controllers
             return RetornoPadrao(HttpStatusCode.NoContent);
         }
 
+        [Authorize(Roles = "ADMIN")]
+        [HttpDelete("material/{id:guid}")]
+        public async Task<IActionResult> DeletarMaterial(Guid id)
+        {
+            var command = new RemoverMaterialAulaCommand(id);
+            await _mediator.Send(command);
+            return RetornoPadrao(HttpStatusCode.NoContent);
+        }
+
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AulaQueryDto>>> ObterTodasAulas()

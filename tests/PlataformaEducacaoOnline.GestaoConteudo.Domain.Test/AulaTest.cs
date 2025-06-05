@@ -28,7 +28,7 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain.Test
         }
 
         [Fact(DisplayName = "Adicionar material existente a uma Aula")]
-        [Trait("Categoria", "Curso Testes")]
+        [Trait("Categoria", "Aula Testes")]
         public void AdicionarMaterial_MaterialExistente_DeveRetornarDomainException()
         {
             var CursoId = Guid.NewGuid();
@@ -42,6 +42,48 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain.Test
 
             // Act && Assert
             Assert.Throws<DomainException>(() => aula.AdicionarMaterial(material));
+        }
+
+        [Fact(DisplayName = "Atualizar titulo com dados validos")]
+        [Trait("Categoria", "Aula Testes")]
+        public void AtualizarTitulo_AtulizarAula_DeveRetornarTituloAtualizado()
+        {
+            var aula = new Aula("Titulo Aula 1", "Conteudo da Aula 1", Guid.NewGuid());
+
+            aula.AtualizarTitulo("Titulo Aula 2");
+
+            Assert.Equal("Titulo Aula 2", aula.Titulo);
+        }
+
+        [Fact(DisplayName = "Atualizar titulo com dados invalidos")]
+        [Trait("Categoria", "Aula Testes")]
+        public void AtualizarTitulo_AtulizarAula_DeveRetornarDomainException()
+        {
+            // Arrange
+            var aula = new Aula("Titulo Aula 1", "Conteudo da Aula 1", Guid.NewGuid());
+            // Act && Assert
+            Assert.Throws<DomainException>(() => aula.AtualizarTitulo(string.Empty));
+        }
+
+        [Fact(DisplayName = "Atualizar conteudo com dados validos")]
+        [Trait("Categoria", "Aula Testes")]
+        public void AtualizarConteudo_AtulizarAula_DeveRetornarTituloAtualizado()
+        {
+            var aula = new Aula("Titulo Aula 1", "Conteudo da Aula 1", Guid.NewGuid());
+
+            aula.AtualizarConteudo("Titulo Aula 2");
+
+            Assert.Equal("Titulo Aula 2", aula.Conteudo);
+        }
+
+        [Fact(DisplayName = "Atualizar conteudo com dados invalidos")]
+        [Trait("Categoria", "Aula Testes")]
+        public void AtualizarConteudo_AtulizarAula_DeveRetornarDomainException()
+        {
+            // Arrange
+            var aula = new Aula("Titulo Aula 1", "Conteudo da Aula 1", Guid.NewGuid());
+            // Act && Assert
+            Assert.Throws<DomainException>(() => aula.AtualizarConteudo(string.Empty));
         }
     }
 }

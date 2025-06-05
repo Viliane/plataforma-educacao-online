@@ -14,6 +14,7 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
         Task<Aula?> ObterAulaPorId(Guid aulaId);
         Task<IEnumerable<Aula>> ObterAulasPorCursoId(Guid cursoId);
         Task<IEnumerable<Material>> ObterMateriaisPorAulaId(Guid aulaId);
+        Task<Material?> ObterMaterialPorId(Guid materialId);
         Task<IEnumerable<Aula>> ObterTodasAulas();
         void Adicionar(Curso curso);
         void Atualizar(Curso curso);
@@ -21,5 +22,6 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
         void Adicionar(Aula aula);
         void Atualizar(Aula aula);
         void Remover(Aula aula);
+        void Remover(Material material);
     }
 }

@@ -50,6 +50,11 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data.Repository
             return await _context.Materiais.AsNoTracking().Where(a => a.AulaId == aulaId).ToListAsync();
         }
 
+        public async Task<Material?> ObterMaterialPorId(Guid materialId)
+        {
+            return await _context.Materiais.AsNoTracking().FirstOrDefaultAsync(m => m.Id == materialId);
+        }
+
         public void Adicionar(Curso curso)
         {
             _context.Cursos.Add(curso);
@@ -78,6 +83,10 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data.Repository
         public void Remover(Aula aula)
         {
             _context.Aulas.Remove(aula);
+        }
+        public void Remover(Material material)
+        {
+            _context.Materiais.Remove(material);
         }
 
         public void Dispose()

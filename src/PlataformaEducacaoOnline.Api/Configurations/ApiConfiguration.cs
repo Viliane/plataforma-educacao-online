@@ -7,14 +7,15 @@
             builder.Services.AddControllers()
                 .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true);
             builder.Services.AddHttpContextAccessor();
-            //builder.Services.AddAutoMapper(typeof(AutoMapperConfig).Assembly);
 
-            builder.Services.AddCors(opt => opt.AddPolicy("*", b =>
+            builder.Services.AddCors(options =>
             {
-                b.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            }));
+                options.AddPolicy("AllowAll",
+                    policy => policy.AllowAnyOrigin()
+                                   .AllowAnyMethod()
+                                   .AllowAnyHeader());
+            });
+
             return builder;
         }
     }
