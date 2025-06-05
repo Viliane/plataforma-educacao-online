@@ -19,6 +19,7 @@
 		<ProjectReference Include="..\PlataformaEducacaoOnline.Core\PlataformaEducacaoOnline.Core.csproj" />
 		<ProjectReference Include="..\PlataformaEducacaoOnline.GestaoConteudo.Application\PlataformaEducacaoOnline.GestaoConteudo.Application.csproj" />
 		<ProjectReference Include="..\PlataformaEducacaoOnline.GestaoConteudo.Data\PlataformaEducacaoOnline.GestaoConteudo.Data.csproj" />
+		<ProjectReference Include="..\PlataformaEducacaoOnline.GestaoConteudo.Domain\PlataformaEducacaoOnline.GestaoConteudo.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PlataformaEducacaoOnline.Api.Data;
-using System;
+using PlataformaEducacaoOnline.GestaoConteudo.Data;
+using PlataformaEducacaoOnline.GestaoConteudo.Domain;
 
 namespace PlataformaEducacaoOnline.Api.Configurations
 {
@@ -22,9 +23,11 @@ namespace PlataformaEducacaoOnline.Api.Configurations
         {
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var contextGestaoConteudo = scope.ServiceProvider.GetRequiredService<GestaoConteudoContext>();
 
             await context.Database.MigrateAsync();
             await InserirDadosIniciais(context);
+            await InserirCursoAulaMaterial(context, contextGestaoConteudo);
         }
 
         private static async Task InserirDadosIniciais(AppDbContext context)
@@ -33,11 +36,11 @@ namespace PlataformaEducacaoOnline.Api.Configurations
 
             #region Criação Administrador
 
-            var UserAdminId = Guid.NewGuid().ToString();
+            var UserAdminId = Guid.NewGuid();
 
             var adminIdentity = new IdentityUser()
             {
-                Id = UserAdminId,
+                Id = UserAdminId.ToString(),
                 Email = "adminTeste@teste.com",
                 EmailConfirmed = true,
                 NormalizedEmail = "ADMINTESTE@TESTE.COM",
@@ -63,7 +66,7 @@ namespace PlataformaEducacaoOnline.Api.Configurations
 
             await context.UserRoles.AddAsync(new IdentityUserRole<string>
             {
-                UserId = UserAdminId,
+                UserId = UserAdminId.ToString(),
                 RoleId = RoleAdminId
             });
 
@@ -109,7 +112,36 @@ namespace PlataformaEducacaoOnline.Api.Configurations
 
             await context.SaveChangesAsync();
 
-            #endregion            
+            #endregion
+        }
+
+        private static async Task InserirCursoAulaMaterial(AppDbContext context, GestaoConteudoContext contextGestaoConteudo)
+        {
+            #region Criar Curso, Aula, Material
+
+            if (contextGestaoConteudo.Set<Curso>().Any() || contextGestaoConteudo.Set<Aula>().Any())
+                return;
+
+            var userAdmin = await context.Users.FirstOrDefaultAsync(x => x.Email == "adminTeste@teste.com");
+
+            var curso = new Curso("Curso de Teste", Guid.Parse(userAdmin.Id), new ConteudoProgramatico("Conteúdo Programático 1"), 200);
+
+            contextGestaoConteudo.Cursos.Add(curso);
+
+            await contextGestaoConteudo.SaveChangesAsync();
+
+            var aula1 = new Aula("Aula 1", "Conteúdo da Aula 1", curso.Id);
+            aula1.AdicionarMaterial(new Material("Aula 1 - Material 1"));
+            aula1.AdicionarMaterial(new Material("Aula 1 - Material 2"));
+
+            var aula2 = new Aula("Aula 2", "Conteúdo da Aula 2", curso.Id);
+            aula2.AdicionarMaterial(new Material("Aula 2 - Material 1"));
+            aula2.AdicionarMaterial(new Material("Aula 2 - Material 2"));
+
+            contextGestaoConteudo.Aulas.AddRange(aula1, aula2);
+            await contextGestaoConteudo.SaveChangesAsync();
+
+            #endregion
         }
     }
 }
