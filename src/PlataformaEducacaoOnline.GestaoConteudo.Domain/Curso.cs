@@ -57,24 +57,7 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
             if (valor <= 0)
                 throw new DomainException("O valor do curso deve ser maior que zero.");
             Valor = valor;
-        }
-
-        //public void AdicionarAula(Aula aula)
-        //{
-        //    if (aula is null) 
-        //        throw new DomainException("A aula não pode ser nula.");
-
-        //    if (ExisteAula(aula))
-        //        throw new DomainException("A aula já está vinculada a este curso.");
-
-        //    aula.VincularCurso(Id);
-        //    _aulas.Add(aula);
-        //}
-
-        //private bool ExisteAula(Aula aula)
-        //{
-        //    return _aulas.Any(a => a.Id == aula.Id);
-        //}
+        }        
 
         private void Validar()
         {

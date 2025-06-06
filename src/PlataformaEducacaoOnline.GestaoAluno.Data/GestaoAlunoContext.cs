@@ -3,23 +3,24 @@ using Microsoft.EntityFrameworkCore;
 using PlataformaEducacaoOnline.Core.Data;
 using PlataformaEducacaoOnline.Core.DomainObjects;
 using PlataformaEducacaoOnline.Core.Messages;
-using PlataformaEducacaoOnline.GestaoConteudo.Domain;
+using PlataformaEducacaoOnline.GestaoAluno.Domain;
 
-namespace PlataformaEducacaoOnline.GestaoConteudo.Data
+namespace PlataformaEducacaoOnline.GestaoAluno.Data
 {
-    public class GestaoConteudoContext : DbContext, IUnitOfWork
+    public class GestaoAlunoContext : DbContext, IUnitOfWork
     {
         private readonly IMediator _mediator;
 
-        public GestaoConteudoContext(DbContextOptions<GestaoConteudoContext> options, IMediator mediator) : base(options)
+        public GestaoAlunoContext(DbContextOptions<GestaoAlunoContext> options, IMediator mediator) : base(options)
         {
             _mediator = mediator;
         }
 
-        public DbSet<Curso> Cursos { get; set; }
-        public DbSet<Aula> Aulas { get; set; }
+        public DbSet<Aluno> Alunos { get; set; }
 
-        public DbSet<Material> Materiais { get; set; }
+        public DbSet<Matricula> Matriculas { get; set; }
+
+        public DbSet<Certificado> Certificados { get; set; }
 
         public async Task<bool> Commit()
         {
@@ -35,8 +36,8 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data
                      .SelectMany(e => e.GetProperties()
                          .Where(p => p.ClrType == typeof(string))))
                 property.SetColumnType("varchar(200)");
-            
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GestaoConteudoContext).Assembly);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GestaoAlunoContext).Assembly);
 
             modelBuilder.Ignore<Event>();
 

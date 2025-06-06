@@ -6,4 +6,22 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="PdfSharpCore" Version="1.3.67" />
+	  <PackageReference Include="MediatR" Version="12.5.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.5" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.5" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+	 <ProjectReference Include="..\PlataformaEducacaoOnline.Core\PlataformaEducacaoOnline.Core.csproj" />
+    <ProjectReference Include="..\PlataformaEducacaoOnline.GestaoAluno.Domain\PlataformaEducacaoOnline.GestaoAluno.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

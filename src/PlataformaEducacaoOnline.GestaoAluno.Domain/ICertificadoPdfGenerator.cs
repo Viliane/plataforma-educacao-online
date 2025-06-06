@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace PlataformaEducacaoOnline.GestaoAluno.Domain
 {
-    public enum StatusMatricula
+    public interface ICertificadoPdfGenerator
     {
-        Inicio = 0,
-        Ativa = 1,
-        PendentePagamento = 2,
-        Cancelada = 3,
-        Concluida = 4
+        byte[] GerarPdf(Certificado certificado);
     }
 }

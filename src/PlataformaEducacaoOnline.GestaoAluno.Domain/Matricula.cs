@@ -11,16 +11,22 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
     {
         public Guid CursoId { get; private set; }
         public Guid AlunoId { get; private set; }
-
+        public DateTime DataMatricula { get; private set; }
         public StatusMatricula StatusMatricula { get; private set; }
+
+        //EF
+        public Aluno Aluno { get; private set; } = null!;
+        public Certificado Certificado { get; private set; } = null!;
+        protected Matricula() { } // EF Constructor
 
         public Matricula(Guid cursoId, Guid alunoId)
         {
             CursoId = cursoId;
             AlunoId = alunoId;
+            DataMatricula = DateTime.UtcNow;
 
             Validar();
-            InicioMatricula();
+            IniciarMatricula();
         }
 
         public void Validar()
@@ -31,7 +37,7 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
                 throw new DomainException("AlunoId não pode ser vazio.");
         }
 
-        public void InicioMatricula()
+        public void IniciarMatricula()
         {
             StatusMatricula = StatusMatricula.Inicio;
         }
@@ -42,8 +48,22 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
         }
 
         public void PendentePagamento()
-        {
+        {            
             StatusMatricula = StatusMatricula.PendentePagamento;
+        }
+
+        public void CancelarMatricula()
+        {
+            if (StatusMatricula == StatusMatricula.Concluida)
+                throw new DomainException("Não é possível cancelar uma matrícula já concluída.");
+            StatusMatricula = StatusMatricula.Cancelada;
+        }
+
+        public void ConcluirCurso()
+        {
+            if (StatusMatricula != StatusMatricula.Ativa)
+                throw new DomainException("A matrícula deve estar ativa para ser concluída.");
+            StatusMatricula = StatusMatricula.Concluida;
         }
     }
 }

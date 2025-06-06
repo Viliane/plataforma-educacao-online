@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PlataformaEducacaoOnline.Core\PlataformaEducacaoOnline.Core.csproj" />
+    <ProjectReference Include="..\PlataformaEducacaoOnline.GestaoAluno.Domain\PlataformaEducacaoOnline.GestaoAluno.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Queries\" />
+  </ItemGroup>
+
 </Project>

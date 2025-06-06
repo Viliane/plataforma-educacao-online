@@ -7,6 +7,7 @@ using PlataformaEducacaoOnline.Api.Controllers.Base;
 using PlataformaEducacaoOnline.Api.DTO;
 using PlataformaEducacaoOnline.Api.Jwt;
 using PlataformaEducacaoOnline.Core.DomainObjects;
+using PlataformaEducacaoOnline.GestaoAluno.Application.Commands;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -154,6 +155,14 @@ namespace PlataformaEducacaoOnline.Api.Controllers
             if (resultadoCriacao.Succeeded)
             {
                 await userManager.AddToRoleAsync(novoUsuario, role);
+
+                if (role == "ALUNO")
+                {
+                    var user = await userManager.FindByEmailAsync(registerUser.Email);
+
+                    var command = new AdicionarAlunoCommand(Guid.Parse(user.Id), registerUser.Nome!);
+                    await _mediator.Send(command);
+                }
             }
             
             return (resultadoCriacao, resultadoCriacao.Succeeded ? novoUsuario.Id : string.Empty);

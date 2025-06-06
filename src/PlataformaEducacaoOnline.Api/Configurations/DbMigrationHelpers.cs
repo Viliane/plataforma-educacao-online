@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PlataformaEducacaoOnline.Api.Data;
+using PlataformaEducacaoOnline.GestaoAluno.Data;
 using PlataformaEducacaoOnline.GestaoConteudo.Data;
 using PlataformaEducacaoOnline.GestaoConteudo.Domain;
 
@@ -24,8 +25,12 @@ namespace PlataformaEducacaoOnline.Api.Configurations
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var contextGestaoConteudo = scope.ServiceProvider.GetRequiredService<GestaoConteudoContext>();
+            var contextGestaoAluno = scope.ServiceProvider.GetRequiredService<GestaoAlunoContext>();
 
             await context.Database.MigrateAsync();
+            await contextGestaoConteudo.Database.MigrateAsync();
+            await contextGestaoAluno.Database.MigrateAsync();
+
             await InserirDadosIniciais(context);
             await InserirCursoAulaMaterial(context, contextGestaoConteudo);
         }
