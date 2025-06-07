@@ -17,8 +17,10 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Data.Mappings
             builder.OwnsOne(a => a.HistoricoAprendizado, a=>
             {
                 a.Property(h => h.Descricao)
+                    .IsRequired(false)
                     .HasColumnType("varchar(500)");
                 a.Property(h => h.DataRegistro)
+                    .IsRequired(false)
                     .HasColumnType("datetime");
             });
 

@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace PlataformaEducacaoOnline.GestaoAluno.Application.Commands
 {
-    public class AlunoCommandHandler : IRequestHandler<AdicionarAlunoCommand, bool>
+    public class AlunoCommandHandler : IRequestHandler<AdicionarAlunoCommand, bool>,
+        IRequestHandler<AdicionarMatriculaCommand, bool>
+
     {
         private readonly IAlunoRepository _alunoRepository;
         private readonly IMediator _mediator;
@@ -32,6 +34,17 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Application.Commands
 
             aluno.AdicionarEvento(new AlunoAdicionadoEvent(aluno.Id, aluno.Nome));
         
+            return await _alunoRepository.UnitOfWork.Commit();
+        }
+
+        public async Task<bool> Handle(AdicionarMatriculaCommand message, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(message))
+                return false;
+
+            var matricula = new Matricula(message.CursoId, message.AlunoId);
+            _alunoRepository.Adicionar(matricula);
+
             return await _alunoRepository.UnitOfWork.Commit();
         }
 

@@ -9,7 +9,7 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
 {
     public class HistoricoAprendizado
     {
-        public DateTime DataRegistro { get; private set; }
+        public DateTime? DataRegistro { get; private set; }
 
         public string Descricao { get; private set; }
 

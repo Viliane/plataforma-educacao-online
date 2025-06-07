@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlataformaEducacaoOnline.GestaoAluno.Data;
 
@@ -10,9 +11,11 @@ using PlataformaEducacaoOnline.GestaoAluno.Data;
 namespace PlataformaEducacaoOnline.GestaoAluno.Data.Migrations
 {
     [DbContext(typeof(GestaoAlunoContext))]
-    partial class GestaoAlunoContextModelSnapshot : ModelSnapshot
+    [Migration("20250607132014_removidoRequeridoHistoricoAprendizadoDataRegistro")]
+    partial class removidoRequeridoHistoricoAprendizadoDataRegistro
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
@@ -94,6 +97,7 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Data.Migrations
                                 .HasColumnType("datetime");
 
                             b1.Property<string>("Descricao")
+                                .IsRequired()
                                 .HasColumnType("varchar(500)");
 
                             b1.HasKey("AlunoId");

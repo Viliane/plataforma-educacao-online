@@ -10,5 +10,13 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
     public interface IAlunoRepository : IRepository<Aluno>
     {
         void Adicionar(Aluno aluno);
+        void Adicionar(Matricula matricula);
+        void AdicionarCertificado(Certificado certificado);
+        Task<Aluno?> ObterPorId(Guid id);
+        Task<IEnumerable<Aluno>> ObterTodos();
+        Task<Matricula?> ObterMatriculaPorId(Guid matriculaId);
+        Task<Matricula?> ObterMatriculaPorAlunoIdCursoId(Guid AlunoId, Guid cursoId);
+        Task<IEnumerable<Matricula>> ObterMatriculasPorAlunoId(Guid alunoId);
+        Task<Certificado?> ObterCertificadoPorId(Guid certificadoId);
     }
 }

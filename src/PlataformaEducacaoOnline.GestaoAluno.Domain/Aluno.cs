@@ -33,11 +33,6 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
             Validar();
         }
 
-        public void Matricular(Matricula matricula)
-        {
-            matricula.PendentePagamento();
-        }
-
         public void SolicitarCertificado()
         {
 

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PlataformaEducacaoOnline.Api.Data;
 using PlataformaEducacaoOnline.GestaoAluno.Data;
+using PlataformaEducacaoOnline.GestaoAluno.Domain;
 using PlataformaEducacaoOnline.GestaoConteudo.Data;
 using PlataformaEducacaoOnline.GestaoConteudo.Domain;
 
@@ -31,11 +32,11 @@ namespace PlataformaEducacaoOnline.Api.Configurations
             await contextGestaoConteudo.Database.MigrateAsync();
             await contextGestaoAluno.Database.MigrateAsync();
 
-            await InserirDadosIniciais(context);
+            await InserirDadosIniciais(context, contextGestaoAluno);
             await InserirCursoAulaMaterial(context, contextGestaoConteudo);
         }
 
-        private static async Task InserirDadosIniciais(AppDbContext context)
+        private static async Task InserirDadosIniciais(AppDbContext context, GestaoAlunoContext gestaoAlunoContext)
         {
             if (context.Users.Any()) return;
 
@@ -117,6 +118,10 @@ namespace PlataformaEducacaoOnline.Api.Configurations
 
             await context.SaveChangesAsync();
 
+            var aluno = new Aluno(Guid.Parse(UserAlunoId), "Aluno Teste");
+            gestaoAlunoContext.Alunos.Add(aluno);
+            await gestaoAlunoContext.SaveChangesAsync();
+
             #endregion
         }
 
@@ -147,6 +152,6 @@ namespace PlataformaEducacaoOnline.Api.Configurations
             await contextGestaoConteudo.SaveChangesAsync();
 
             #endregion
-        }
+        }        
     }
 }

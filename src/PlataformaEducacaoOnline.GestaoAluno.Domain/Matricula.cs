@@ -39,17 +39,12 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
 
         public void IniciarMatricula()
         {
-            StatusMatricula = StatusMatricula.Inicio;
+            StatusMatricula = StatusMatricula.PendentePagamento;
         }
 
         public void AtivarMatricula()
         {
             StatusMatricula = StatusMatricula.Ativa;
-        }
-
-        public void PendentePagamento()
-        {            
-            StatusMatricula = StatusMatricula.PendentePagamento;
         }
 
         public void CancelarMatricula()

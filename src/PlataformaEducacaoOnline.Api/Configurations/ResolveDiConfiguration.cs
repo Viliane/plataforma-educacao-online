@@ -5,6 +5,7 @@ using PlataformaEducacaoOnline.Api.Extensions;
 using PlataformaEducacaoOnline.Api.Interfaces;
 using PlataformaEducacaoOnline.Core.DomainObjects;
 using PlataformaEducacaoOnline.GestaoAluno.Application.Commands;
+using PlataformaEducacaoOnline.GestaoAluno.Application.Queries;
 using PlataformaEducacaoOnline.GestaoAluno.Data;
 using PlataformaEducacaoOnline.GestaoAluno.Data.Repository;
 using PlataformaEducacaoOnline.GestaoAluno.Domain;
@@ -32,8 +33,8 @@ namespace PlataformaEducacaoOnline.Api.Configurations
 
             //Gestão de Alunos
             builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
+            builder.Services.AddScoped<IAlunoQueries, AlunoQueries>();
             builder.Services.AddScoped<GestaoAlunoContext>();
-            
 
             //Mediator
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
@@ -44,7 +45,8 @@ namespace PlataformaEducacaoOnline.Api.Configurations
             typeof(AtualizarCursoCommand).Assembly,
             typeof(RemoverCursoCommand).Assembly,
             typeof(AlunoCommandHandler).Assembly,
-            typeof(AdicionarAlunoCommand).Assembly));
+            typeof(AdicionarAlunoCommand).Assembly,
+            typeof(AdicionarMatriculaCommand).Assembly));
 
             return builder;
         }
