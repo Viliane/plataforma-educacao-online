@@ -13,8 +13,8 @@ using System.Net;
 
 namespace PlataformaEducacaoOnline.Api.Controllers
 {
-    [Route("api/aluno")]
-    public class AlunoController(INotificationHandler<DomainNotification> notificacoes,
+    [Route("api/matricula")]
+    public class MatriculaController(INotificationHandler<DomainNotification> notificacoes,
                                    IMediator mediator, IAlunoQueries alunoQueries, 
                                    ICursoQueries cursoQueries, 
                                    IPagamentoRepository pagamentoRepository)
@@ -26,7 +26,7 @@ namespace PlataformaEducacaoOnline.Api.Controllers
         private readonly IPagamentoRepository _pagamentoRepository = pagamentoRepository;
 
         [Authorize(Roles = "ALUNO")]
-        [HttpPost("matricula")]
+        [HttpPost()]
         public async Task<IActionResult> Adicionar([FromBody] MatriculaDto matricula)
         {
             var command = new AdicionarMatriculaCommand(UsuarioId, matricula.CursoId);
@@ -35,7 +35,7 @@ namespace PlataformaEducacaoOnline.Api.Controllers
         }
 
         [Authorize(Roles = "ALUNO")]
-        [HttpPost("resumoMatricula")]
+        [HttpPost("resumo-matricula")]
         public async Task<ActionResult<ResumoMatriculaDto>> ObterResumoMatricula([FromBody] MatriculaDto matricula)
         {
             if (matricula.AlunoId != UsuarioId)
@@ -68,7 +68,7 @@ namespace PlataformaEducacaoOnline.Api.Controllers
         }
 
         [Authorize(Roles = "ALUNO")]
-        [HttpPost("realizarPagamento")]
+        [HttpPost("realizar-pagamento")]
         public async Task<IActionResult> RealizarPagamento([FromBody] PagamentoMatriculaDto pagamentoDto)
         {
             if (pagamentoDto.AlunoId != UsuarioId)
