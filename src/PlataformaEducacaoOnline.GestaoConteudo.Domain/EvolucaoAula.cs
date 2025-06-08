@@ -7,16 +7,20 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
     {
         public Guid AulaId { get; private set; }
         public Guid UsuarioId { get; private set; }
+        public Guid CursoId { get; private set; }
+
         public StatusAula Status { get; private set; }
 
         //EF
         protected EvolucaoAula() { }
 
-        public EvolucaoAula(Guid aulaId, Guid usuarioId)
+        public EvolucaoAula(Guid aulaId, Guid usuarioId, Guid cursoId)
         {
             AulaId = aulaId;
             UsuarioId = usuarioId;
             Status = StatusAula.NaoIniciada;
+            CursoId = cursoId;
+
             Validar();
         }
 
@@ -36,6 +40,8 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
                 throw new DomainException("O ID da aula não pode ser vazio.");
             if (UsuarioId == Guid.Empty)
                 throw new DomainException("O ID do usuário não pode ser vazio.");
+            if (CursoId == Guid.Empty)
+                throw new DomainException("O ID do curso não pode ser vazio.");
         }
     }
 }

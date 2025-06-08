@@ -35,6 +35,8 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands
         {
             RuleFor(RuleFor => RuleFor.UsuarioId)
                 .NotEqual(Guid.Empty).WithMessage("O ID do usuário é obrigatório.");
+            RuleFor(RuleFor => RuleFor.CursoId)
+                .NotEqual(Guid.Empty).WithMessage("O ID do curso é obrigatório.");
         }
     }
 }

@@ -16,8 +16,8 @@ namespace PlataformaEducacaoOnline.Api.Controllers
 {
     [Route("api/matricula")]
     public class MatriculaController(INotificationHandler<DomainNotification> notificacoes,
-                                   IMediator mediator, IAlunoQueries alunoQueries, 
-                                   ICursoQueries cursoQueries, 
+                                   IMediator mediator, IAlunoQueries alunoQueries,
+                                   ICursoQueries cursoQueries,
                                    IPagamentoRepository pagamentoRepository)
         : MainController(notificacoes, mediator)
     {
@@ -99,14 +99,14 @@ namespace PlataformaEducacaoOnline.Api.Controllers
 
             var pagamento = await _pagamentoRepository.ObterPagamentoPorAlunoIdCursoIdMatriculaId(UsuarioId, curso.Id, dadosMatricula.Id);
 
-            if(pagamento != null)
+            if (pagamento != null)
             {
                 NotificarErro("Pagamento", "Você não tem permissão para realizar outro pagamento para a mesma matricula.");
                 return RetornoPadrao();
             }
 
-            var RealizarPagamentoCommand = new RealizarPagamentoCommand(pagamentoDto.AlunoId, pagamentoDto.CursoId, dadosMatricula.Id, pagamentoDto.Valor, 
-                                                       pagamentoDto.NomeCartao, pagamentoDto.NumeroCartao, 
+            var RealizarPagamentoCommand = new RealizarPagamentoCommand(pagamentoDto.AlunoId, pagamentoDto.CursoId, dadosMatricula.Id, pagamentoDto.Valor,
+                                                       pagamentoDto.NomeCartao, pagamentoDto.NumeroCartao,
                                                        pagamentoDto.ExpiracaoCartao, pagamentoDto.CvvCartao);
 
             await _mediator.Send(RealizarPagamentoCommand);
@@ -120,6 +120,25 @@ namespace PlataformaEducacaoOnline.Api.Controllers
             }
 
             return RetornoPadrao(HttpStatusCode.Created);
+        }
+
+        [Authorize(Roles = "ALUNO")]
+        [HttpPost("finalizar-curso")]
+        public async Task<IActionResult> FinalizarCurso([FromBody] MatriculaDto matricula)
+        {  
+            var evolucaoAula = await _cursoQueries.ObterEvolucaoAulaPorUsuarioIdCursoId(UsuarioId, matricula.CursoId);            
+            var todasAulasConcluidas = evolucaoAula != null && evolucaoAula.All(a => a.Status == (int)StatusAula.Concluida);
+
+            if (!todasAulasConcluidas)
+            {
+                NotificarErro("FinalizarCurso", "Nem todas as aulas foram concluídas.");
+                return RetornoPadrao();
+            }
+
+            var finalizarCursoCommand = new FinalizarCursoCommand(UsuarioId, matricula.CursoId);
+            await _mediator.Send(finalizarCursoCommand);
+
+            return RetornoPadrao(HttpStatusCode.OK);
         }
     }
 }

@@ -84,5 +84,18 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Queries
                 Materiais = _cursoRepository.ObterMateriaisPorAulaId(aula.Id).Result.Select(m => new Material(m.Id, m.Nome, m.AulaId)).ToList()
             }));
         }
+
+        public async Task<IEnumerable<EvolucaoAulaQueryDto>> ObterEvolucaoAulaPorUsuarioIdCursoId(Guid usuarioId, Guid cursoId)
+        {
+            var evolucoes = await _cursoRepository.ObterEvolucaoAulaPorUsuarioIdCursoId(usuarioId, cursoId);
+            return evolucoes.Select(e => new EvolucaoAulaQueryDto
+            {
+                Id = e.Id,
+                AulaId = e.AulaId,
+                UsuarioId = e.UsuarioId,
+                CursoId = e.CursoId,
+                Status = (int)e.Status
+            });
+        }
     }
 }

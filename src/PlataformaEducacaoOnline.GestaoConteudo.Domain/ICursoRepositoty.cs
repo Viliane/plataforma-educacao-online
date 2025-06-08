@@ -26,5 +26,6 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
         void AdicionarEvolucaoAula(EvolucaoAula aulaEvolucao);
         Task<EvolucaoAula?> ObterEvolucaoAulaPorAulaIdUsuarioId(Guid aulaId, Guid usuarioId);
         void Atualizar(EvolucaoAula evolucaoAula);
+        Task<IEnumerable<EvolucaoAula>> ObterEvolucaoAulaPorUsuarioIdCursoId(Guid usuarioId, Guid cursoId);
     }
 }

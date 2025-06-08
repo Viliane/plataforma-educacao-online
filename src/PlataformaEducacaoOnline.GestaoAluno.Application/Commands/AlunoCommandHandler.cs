@@ -11,7 +11,8 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Application.Commands
     public class AlunoCommandHandler : IRequestHandler<AdicionarAlunoCommand, bool>,
         IRequestHandler<AdicionarMatriculaCommand, bool>,
         IRequestHandler<RealizarPagamentoCommand, bool>,
-        IRequestHandler<AtualizarMatriculaCommand, bool>
+        IRequestHandler<AtualizarMatriculaCommand, bool>,
+        IRequestHandler<FinalizarCursoCommand, bool>
     {
         private readonly IAlunoRepository _alunoRepository;
         private readonly IMediator _mediator;
@@ -80,6 +81,24 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Application.Commands
             }
 
             matricula.AtivarMatricula();
+            _alunoRepository.Atualizar(matricula);
+
+            return await _alunoRepository.UnitOfWork.Commit();
+        }
+
+        public async Task<bool> Handle(FinalizarCursoCommand message, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(message))
+                return false;
+
+            var matricula = await _alunoRepository.ObterMatriculaPorAlunoIdCursoId(message.AlunoId, message.CursoId);
+            if (matricula is null)
+            {
+                await _mediator.Publish(new DomainNotification(message.MessageType, "Matrícula não encontrada."));
+                return false;
+            }
+
+            matricula.ConcluirCurso();
             _alunoRepository.Atualizar(matricula);
 
             return await _alunoRepository.UnitOfWork.Commit();

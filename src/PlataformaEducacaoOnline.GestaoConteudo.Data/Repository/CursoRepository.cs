@@ -104,6 +104,11 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data.Repository
             _context.EvolucaoAulas.Update(evolucaoAula);
         }
 
+        public async Task<IEnumerable<EvolucaoAula>> ObterEvolucaoAulaPorUsuarioIdCursoId(Guid usuarioId, Guid cursoId)
+        {
+            return await _context.EvolucaoAulas.AsNoTracking().Where(e => e.UsuarioId == usuarioId && e.CursoId == cursoId).ToListAsync();
+        }
+
         public void Dispose()
         {
             _context?.Dispose();

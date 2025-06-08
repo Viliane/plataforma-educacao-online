@@ -43,17 +43,8 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
             StatusMatricula = StatusMatricula.Ativa;
         }
 
-        public void CancelarMatricula()
-        {
-            if (StatusMatricula == StatusMatricula.Concluida)
-                throw new DomainException("Não é possível cancelar uma matrícula já concluída.");
-            StatusMatricula = StatusMatricula.Cancelada;
-        }
-
         public void ConcluirCurso()
-        {
-            if (StatusMatricula != StatusMatricula.Ativa)
-                throw new DomainException("A matrícula deve estar ativa para ser concluída.");
+        {   
             StatusMatricula = StatusMatricula.Concluida;
         }
     }

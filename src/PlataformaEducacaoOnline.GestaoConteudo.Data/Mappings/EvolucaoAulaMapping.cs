@@ -23,6 +23,10 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data.Mappings
                 .IsRequired()
                 .HasColumnName("UsuarioId");
 
+            builder.Property(e => e.CursoId)
+                .IsRequired()
+                .HasColumnName("CursoId");
+
             builder.Property(e=> e.Status)
                 .IsRequired()
                 .HasConversion<int>()

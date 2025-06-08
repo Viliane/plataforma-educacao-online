@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlataformaEducacaoOnline.GestaoConteudo.Data;
 
@@ -10,9 +11,11 @@ using PlataformaEducacaoOnline.GestaoConteudo.Data;
 namespace PlataformaEducacaoOnline.GestaoConteudo.Data.Migrations
 {
     [DbContext(typeof(GestaoConteudoContext))]
-    partial class GestaoConteudoContextModelSnapshot : ModelSnapshot
+    [Migration("20250608174630_AdicionadoEvolucaoAulaCursoID")]
+    partial class AdicionadoEvolucaoAulaCursoID
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
@@ -79,8 +82,7 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data.Migrations
                         .HasColumnName("AulaId");
 
                     b.Property<Guid>("CursoId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("CursoId");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER")

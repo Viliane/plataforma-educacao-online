@@ -127,7 +127,7 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands
             
             foreach (var aulaDto in message.AulaCurso)
             {
-                var evolucaoAula = new EvolucaoAula(aulaDto.Id, message.UsuarioId);
+                var evolucaoAula = new EvolucaoAula(aulaDto.Id, message.UsuarioId, message.CursoId);
                 _cursoRepository.AdicionarEvolucaoAula(evolucaoAula);
             }
 

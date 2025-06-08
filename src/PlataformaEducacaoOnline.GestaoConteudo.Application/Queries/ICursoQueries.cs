@@ -10,5 +10,6 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Queries
         Task<AulaQueryDto?> ObterAulaPorId(Guid aulaId);        
         Task<IEnumerable<AulaQueryDto>> ObterTodasAulas();
         Task<IEnumerable<AulaQueryDto>> ObterAulasPorCursoId(Guid cursoId);
+        Task<IEnumerable<EvolucaoAulaQueryDto>> ObterEvolucaoAulaPorUsuarioIdCursoId(Guid usuarioId, Guid cursoId);
     }
 }
