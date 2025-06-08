@@ -6,6 +6,7 @@ namespace PlataformaEducacaoOnline.PagamentoFaturamento.Business
     {
         void Adicionar(Pagamento pagamento);
         void Adicionar(Transacao transacao);
-        Task<Transacao?> ObterTransacaoPorAlunoIdCursoIdMatricula(Guid alunoId, Guid cursoId, Guid Matricula);
+        Task<Pagamento?> ObterPagamentoPorAlunoIdCursoIdMatriculaId(Guid alunoId, Guid cursoId, Guid matriculaId);
+        Task<Transacao?> ObterTransacaoPorAlunoIdCursoIdMatricula(Guid alunoId, Guid cursoId, Guid matriculaId);
     }
 }

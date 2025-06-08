@@ -36,6 +36,12 @@ namespace PlataformaEducacaoOnline.PagamentoFaturamento.Data.Repository
                 .FirstOrDefaultAsync(t => t.AlunoId == alunoId && t.CursoId == cursoId && t.MatriculaId == Matricula);
         }
 
+        public async Task<Pagamento?> ObterPagamentoPorAlunoIdCursoIdMatriculaId(Guid alunoId, Guid cursoId, Guid matriculaId)
+        {
+            return await _context.Pagamentos.AsNoTracking()
+                .FirstOrDefaultAsync(p => p.AlunoId == alunoId && p.CursoId == cursoId && p.MatriculaId == matriculaId);
+        }
+
         public void Dispose()
         {
             _context.Dispose();

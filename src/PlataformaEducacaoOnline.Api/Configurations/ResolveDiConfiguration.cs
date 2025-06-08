@@ -61,7 +61,9 @@ namespace PlataformaEducacaoOnline.Api.Configurations
             typeof(RemoverCursoCommand).Assembly,
             typeof(AlunoCommandHandler).Assembly,
             typeof(AdicionarAlunoCommand).Assembly,
-            typeof(AdicionarMatriculaCommand).Assembly));
+            typeof(AdicionarMatriculaCommand).Assembly,
+            typeof(RealizarPagamentoCommand).Assembly,
+            typeof(AtualizarMatriculaCommand).Assembly));
 
             return builder;
         }

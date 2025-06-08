@@ -24,6 +24,7 @@ namespace PlataformaEducacaoOnline.PagamentoFaturamento.Business.Events
             {
                 AlunoId = message.AlunoId,
                 CursoId = message.CursoId,
+                MatriculaId = message.MatriculaId,
                 Valor = message.Valor,
                 NomeCartao = message.NomeCartao,
                 NumeroCartao = message.NumeroCartao,

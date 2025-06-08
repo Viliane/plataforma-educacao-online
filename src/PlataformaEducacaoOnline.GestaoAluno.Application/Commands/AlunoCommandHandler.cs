@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PlataformaEducacaoOnline.Core.Bus;
 using PlataformaEducacaoOnline.Core.DomainObjects;
 using PlataformaEducacaoOnline.Core.Messages;
 using PlataformaEducacaoOnline.Core.Messages.CommonMessagens.IntegrationEvent;
@@ -14,11 +15,13 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Application.Commands
     {
         private readonly IAlunoRepository _alunoRepository;
         private readonly IMediator _mediator;
+        private readonly IMediatrHandler _mediatorHandler;
 
-        public AlunoCommandHandler(IAlunoRepository alunoRepository, IMediator mediator)
+        public AlunoCommandHandler(IAlunoRepository alunoRepository, IMediator mediator, IMediatrHandler mediatorHandler)
         {
             _alunoRepository = alunoRepository;
             _mediator = mediator;
+            _mediatorHandler = mediatorHandler;
         }
 
         public async Task<bool> Handle(AdicionarAlunoCommand message, CancellationToken cancellationToken)
@@ -50,11 +53,10 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Application.Commands
             if (!ValidarComando(message))
                 return false;
 
-            var matricula = new Matricula(message.CursoId, message.AlunoId);
-
-            matricula.AdicionarEvento(new PedidoMatriculaConfirmadoEvent(
+            await _mediatorHandler.PublicarEvento(new PedidoMatriculaConfirmadoEvent(
                 message.AlunoId, 
                 message.CursoId, 
+                message.MatriculaId,
                 message.Valor, 
                 message.NomeCartao, 
                 message.NumeroCartao, 

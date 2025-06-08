@@ -1,7 +1,5 @@
 ﻿using PlataformaEducacaoOnline.Core.Bus;
 using PlataformaEducacaoOnline.Core.DomainObjects;
-
-
 using PlataformaEducacaoOnline.Core.DomainObjects.DTO;
 using PlataformaEducacaoOnline.Core.Messages.CommonMessagens.IntegrationEvent;
 
@@ -28,19 +26,23 @@ namespace PlataformaEducacaoOnline.PagamentoFaturamento.Business
             {
                 AlunoId = pagamentoMatricula.AlunoId,
                 CursoId = pagamentoMatricula.CursoId,
+                MatriculaId = pagamentoMatricula.MatriculaId,
                 Valor = pagamentoMatricula.Valor,
             };
 
             var pagamento = new Pagamento
             {
                 DadosCartao  = new DadosCartao
-                {
+                {   
                     NomeCartao = pagamentoMatricula.NomeCartao,
                     NumeroCartao = pagamentoMatricula.NumeroCartao,
                     ExpiracaoCartao = pagamentoMatricula.ExpiracaoCartao,
                     CodigoSegurancaCartao = pagamentoMatricula.CvvCartao                    
                 },
-                
+
+                MatriculaId = pagamentoMatricula.MatriculaId,
+                CursoId = pagamentoMatricula.CursoId,
+                AlunoId = pagamentoMatricula.AlunoId,
                 Valor = pagamentoMatricula.Valor
             };
 

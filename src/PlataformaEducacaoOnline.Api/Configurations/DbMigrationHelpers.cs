@@ -5,6 +5,7 @@ using PlataformaEducacaoOnline.GestaoAluno.Data;
 using PlataformaEducacaoOnline.GestaoAluno.Domain;
 using PlataformaEducacaoOnline.GestaoConteudo.Data;
 using PlataformaEducacaoOnline.GestaoConteudo.Domain;
+using PlataformaEducacaoOnline.PagamentoFaturamento.Data;
 
 namespace PlataformaEducacaoOnline.Api.Configurations
 {
@@ -27,10 +28,12 @@ namespace PlataformaEducacaoOnline.Api.Configurations
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var contextGestaoConteudo = scope.ServiceProvider.GetRequiredService<GestaoConteudoContext>();
             var contextGestaoAluno = scope.ServiceProvider.GetRequiredService<GestaoAlunoContext>();
+            var contextPagamento = scope.ServiceProvider.GetRequiredService<PagamentoContext>();
 
             await context.Database.MigrateAsync();
             await contextGestaoConteudo.Database.MigrateAsync();
             await contextGestaoAluno.Database.MigrateAsync();
+            await contextPagamento.Database.MigrateAsync();
 
             await InserirDadosIniciais(context, contextGestaoAluno);
             await InserirCursoAulaMaterial(context, contextGestaoConteudo);

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using PlataformaEducacaoOnline.Api.Controllers.Base;
 using PlataformaEducacaoOnline.Api.DTO;
 using PlataformaEducacaoOnline.Core.DomainObjects;
-using PlataformaEducacaoOnline.Core.DomainObjects.DTO;
 using PlataformaEducacaoOnline.GestaoAluno.Application.Commands;
 using PlataformaEducacaoOnline.GestaoAluno.Application.Queries;
 using PlataformaEducacaoOnline.GestaoAluno.Domain;
@@ -70,7 +69,7 @@ namespace PlataformaEducacaoOnline.Api.Controllers
 
         [Authorize(Roles = "ALUNO")]
         [HttpPost("realizarPagamento")]
-        public async Task<IActionResult> RealizarPagamento([FromBody] PagamentoMatricula pagamentoDto)
+        public async Task<IActionResult> RealizarPagamento([FromBody] PagamentoMatriculaDto pagamentoDto)
         {
             if (pagamentoDto.AlunoId != UsuarioId)
             {
@@ -91,20 +90,23 @@ namespace PlataformaEducacaoOnline.Api.Controllers
                 return NotFound(new { Sucesso = false, Erros = new[] { "Curso não encontrado." } });
             }
 
+            var pagamento = await _pagamentoRepository.ObterPagamentoPorAlunoIdCursoIdMatriculaId(UsuarioId, curso.Id, dadosMatricula.Id);
+
+            if(pagamento != null)
+            {
+                NotificarErro("Pagamento", "Você não tem permissão para realizar outro pagamento para a mesma matricula.");
+                return RetornoPadrao();
+            }
+
             var RealizarPagamentoCommand = new RealizarPagamentoCommand(pagamentoDto.AlunoId, pagamentoDto.CursoId, dadosMatricula.Id, pagamentoDto.Valor, 
                                                        pagamentoDto.NomeCartao, pagamentoDto.NumeroCartao, 
                                                        pagamentoDto.ExpiracaoCartao, pagamentoDto.CvvCartao);
 
             await _mediator.Send(RealizarPagamentoCommand);
 
-            var transacao = _pagamentoRepository.ObterTransacaoPorAlunoIdCursoIdMatricula(UsuarioId, curso.Id, dadosMatricula.Id);
+            var transacao = await _pagamentoRepository.ObterTransacaoPorAlunoIdCursoIdMatricula(UsuarioId, curso.Id, dadosMatricula.Id);
 
-            if (transacao == null)
-            {
-                return NotFound(new { Sucesso = false, Erros = new[] { "Transação de pagamento não encontrada." } });
-            }
-
-            if ((int)transacao.Status == (int)StatusTransacao.Pago)
+            if ((int)transacao.StatusTransacao == (int)StatusTransacao.Pago)
             {
                 var AtualizarMatriculaCommand = new AtualizarMatriculaCommand(dadosMatricula.Id);
                 await _mediator.Send(AtualizarMatriculaCommand);

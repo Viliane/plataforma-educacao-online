@@ -17,10 +17,11 @@ namespace PlataformaEducacaoOnline.Core.Messages.CommonMessagens.IntegrationEven
         public string ExpiracaoCartao { get; private set; }
         public string CvvCartao { get; private set; }
 
-        public PedidoMatriculaConfirmadoEvent(Guid alunoId, Guid cursoId, decimal valor, string nomeCartao, string numeroCartao, string expiracaoCartao, string cvvCartao)
+        public PedidoMatriculaConfirmadoEvent(Guid alunoId, Guid cursoId, Guid matriculaId, decimal valor, string nomeCartao, string numeroCartao, string expiracaoCartao, string cvvCartao)
         {
             AlunoId = alunoId;
             CursoId = cursoId;
+            MatriculaId = matriculaId;
             Valor = valor;
             NomeCartao = nomeCartao;
             NumeroCartao = numeroCartao;

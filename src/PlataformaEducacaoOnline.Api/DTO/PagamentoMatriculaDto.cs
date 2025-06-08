@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PlataformaEducacaoOnline.Core.DomainObjects.DTO
+﻿namespace PlataformaEducacaoOnline.Api.DTO
 {
-    public class PagamentoMatricula
+    public class PagamentoMatriculaDto
     {
         public Guid CursoId { get; set; }
         public Guid AlunoId { get; set; }
-        public Guid MatriculaId { get; set; }
         public decimal Valor { get; set; }
         public string NomeCartao { get; set; }
         public string NumeroCartao { get; set; }
