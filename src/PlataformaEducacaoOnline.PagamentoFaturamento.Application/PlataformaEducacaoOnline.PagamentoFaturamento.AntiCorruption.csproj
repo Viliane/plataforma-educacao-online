@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PlataformaEducacaoOnline.PagamentoFaturamento.Business\PlataformaEducacaoOnline.PagamentoFaturamento.Business.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -18,5 +18,6 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
         Task<Matricula?> ObterMatriculaPorAlunoIdCursoId(Guid AlunoId, Guid cursoId);
         Task<IEnumerable<Matricula>> ObterMatriculasPorAlunoId(Guid alunoId);
         Task<Certificado?> ObterCertificadoPorId(Guid certificadoId);
+        void Atualizar(Matricula matricula);
     }
 }

@@ -22,6 +22,9 @@
 		<ProjectReference Include="..\PlataformaEducacaoOnline.GestaoConteudo.Application\PlataformaEducacaoOnline.GestaoConteudo.Application.csproj" />
 		<ProjectReference Include="..\PlataformaEducacaoOnline.GestaoConteudo.Data\PlataformaEducacaoOnline.GestaoConteudo.Data.csproj" />
 		<ProjectReference Include="..\PlataformaEducacaoOnline.GestaoConteudo.Domain\PlataformaEducacaoOnline.GestaoConteudo.Domain.csproj" />
+		<ProjectReference Include="..\PlataformaEducacaoOnline.PagamentoFaturamento.Application\PlataformaEducacaoOnline.PagamentoFaturamento.AntiCorruption.csproj" />
+		<ProjectReference Include="..\PlataformaEducacaoOnline.PagamentoFaturamento.Business\PlataformaEducacaoOnline.PagamentoFaturamento.Business.csproj" />
+		<ProjectReference Include="..\PlataformaEducacaoOnline.PagamentoFaturamento.Data\PlataformaEducacaoOnline.PagamentoFaturamento.Data.csproj" />
 	</ItemGroup>
 
 </Project>

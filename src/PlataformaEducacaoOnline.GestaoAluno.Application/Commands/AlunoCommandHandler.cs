@@ -1,19 +1,16 @@
 ﻿using MediatR;
 using PlataformaEducacaoOnline.Core.DomainObjects;
 using PlataformaEducacaoOnline.Core.Messages;
+using PlataformaEducacaoOnline.Core.Messages.CommonMessagens.IntegrationEvent;
 using PlataformaEducacaoOnline.GestaoAluno.Application.Events;
 using PlataformaEducacaoOnline.GestaoAluno.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlataformaEducacaoOnline.GestaoAluno.Application.Commands
 {
     public class AlunoCommandHandler : IRequestHandler<AdicionarAlunoCommand, bool>,
-        IRequestHandler<AdicionarMatriculaCommand, bool>
-
+        IRequestHandler<AdicionarMatriculaCommand, bool>,
+        IRequestHandler<RealizarPagamentoCommand, bool>,
+        IRequestHandler<AtualizarMatriculaCommand, bool>
     {
         private readonly IAlunoRepository _alunoRepository;
         private readonly IMediator _mediator;
@@ -44,6 +41,44 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Application.Commands
 
             var matricula = new Matricula(message.CursoId, message.AlunoId);
             _alunoRepository.Adicionar(matricula);
+
+            return await _alunoRepository.UnitOfWork.Commit();
+        }
+
+        public async Task<bool> Handle(RealizarPagamentoCommand message, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(message))
+                return false;
+
+            var matricula = new Matricula(message.CursoId, message.AlunoId);
+
+            matricula.AdicionarEvento(new PedidoMatriculaConfirmadoEvent(
+                message.AlunoId, 
+                message.CursoId, 
+                message.Valor, 
+                message.NomeCartao, 
+                message.NumeroCartao, 
+                message.ExpiracaoCartao, 
+                message.CvvCartao));
+
+            return true;
+        }
+
+        public async Task<bool> Handle(AtualizarMatriculaCommand message, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(message))
+                return false;
+
+            var matricula = await _alunoRepository.ObterMatriculaPorId(message.MatriculaId);
+
+            if (matricula is null)
+            {
+                await _mediator.Publish(new DomainNotification(message.MessageType, "Matrícula não encontrada."));
+                return false;
+            }
+
+            matricula.AtivarMatricula();
+            _alunoRepository.Atualizar(matricula);
 
             return await _alunoRepository.UnitOfWork.Commit();
         }

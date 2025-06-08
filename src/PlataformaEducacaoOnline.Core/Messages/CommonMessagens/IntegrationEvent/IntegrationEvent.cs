@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlataformaEducacaoOnline.PagamentoFaturamento.Domain
+namespace PlataformaEducacaoOnline.Core.Messages.CommonMessagens.IntegrationEvent
 {
-    public class DadosCartao
+    public abstract class IntegrationEvent : Event
     {
     }
 }

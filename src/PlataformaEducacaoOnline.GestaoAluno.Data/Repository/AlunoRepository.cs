@@ -65,6 +65,11 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Data.Repository
             return await _context.Certificados.AsNoTracking().FirstOrDefaultAsync(c => c.Id == certificadoId);
         }
 
+        public void Atualizar(Matricula matricula)
+        {
+            _context.Matriculas.Update(matricula);
+        }
+
         public void Dispose()
         {
             _context?.Dispose();

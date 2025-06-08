@@ -2,6 +2,7 @@
 using PlataformaEducacaoOnline.Api.Data;
 using PlataformaEducacaoOnline.GestaoAluno.Data;
 using PlataformaEducacaoOnline.GestaoConteudo.Data;
+using PlataformaEducacaoOnline.PagamentoFaturamento.Data;
 using System;
 
 namespace PlataformaEducacaoOnline.Api.Configurations
@@ -26,6 +27,11 @@ namespace PlataformaEducacaoOnline.Api.Configurations
                 {
                     opt.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
                 });
+
+                builder.Services.AddDbContext<PagamentoContext>(opt =>
+                {
+                    opt.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
+                });
             }
             else
             {
@@ -40,6 +46,11 @@ namespace PlataformaEducacaoOnline.Api.Configurations
                 });
 
                 builder.Services.AddDbContext<GestaoAlunoContext>(opt =>
+                {
+                    opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
+                });
+
+                builder.Services.AddDbContext<PagamentoContext>(opt =>
                 {
                     opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
                 });

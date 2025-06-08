@@ -2,6 +2,7 @@
 using PlataformaEducacaoOnline.Core.DomainObjects;
 using PlataformaEducacaoOnline.Core.Messages;
 using PlataformaEducacaoOnline.GestaoConteudo.Application.Events;
+using PlataformaEducacaoOnline.GestaoConteudo.Data;
 using PlataformaEducacaoOnline.GestaoConteudo.Domain;
 
 namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands

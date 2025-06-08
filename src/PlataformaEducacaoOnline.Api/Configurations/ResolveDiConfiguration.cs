@@ -1,20 +1,24 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using PlataformaEducacaoOnline.Api.Extensions;
 using PlataformaEducacaoOnline.Api.Interfaces;
+using PlataformaEducacaoOnline.Core.Bus;
 using PlataformaEducacaoOnline.Core.DomainObjects;
+using PlataformaEducacaoOnline.Core.Messages.CommonMessagens.IntegrationEvent;
 using PlataformaEducacaoOnline.GestaoAluno.Application.Commands;
 using PlataformaEducacaoOnline.GestaoAluno.Application.Queries;
 using PlataformaEducacaoOnline.GestaoAluno.Data;
 using PlataformaEducacaoOnline.GestaoAluno.Data.Repository;
 using PlataformaEducacaoOnline.GestaoAluno.Domain;
 using PlataformaEducacaoOnline.GestaoConteudo.Application.Commands;
-using PlataformaEducacaoOnline.GestaoConteudo.Application.Events;
 using PlataformaEducacaoOnline.GestaoConteudo.Application.Queries;
 using PlataformaEducacaoOnline.GestaoConteudo.Data;
 using PlataformaEducacaoOnline.GestaoConteudo.Data.Repository;
 using PlataformaEducacaoOnline.GestaoConteudo.Domain;
+using PlataformaEducacaoOnline.PagamentoFaturamento.AntiCorruption;
+using PlataformaEducacaoOnline.PagamentoFaturamento.Business;
+using PlataformaEducacaoOnline.PagamentoFaturamento.Business.Events;
+using PlataformaEducacaoOnline.PagamentoFaturamento.Data;
+using PlataformaEducacaoOnline.PagamentoFaturamento.Data.Repository;
 
 namespace PlataformaEducacaoOnline.Api.Configurations
 {
@@ -24,6 +28,7 @@ namespace PlataformaEducacaoOnline.Api.Configurations
         {
             builder.Services.AddScoped<IAppIdentityUser, AppIdentityUser>();
             builder.Services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
+            builder.Services.AddScoped<IMediatrHandler, MediatrHandler>();
             //builder.Services.AddScoped<INotificationHandler<CursoAdicionadoEvent>, CursoAdicionadoEventHandler>();
 
             // Gestão de Conteúdos
@@ -35,6 +40,16 @@ namespace PlataformaEducacaoOnline.Api.Configurations
             builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
             builder.Services.AddScoped<IAlunoQueries, AlunoQueries>();
             builder.Services.AddScoped<GestaoAlunoContext>();
+
+            //Gestão de Pagamento
+            builder.Services.AddScoped<IPagamentoRepository, PagamentoRepository>();
+            builder.Services.AddScoped<IPagamentoServices, PagamentoService>();
+            builder.Services.AddScoped<IPagamentoCartaoCreditoFacade, PagamentoCartaoCreditoFacade>();
+            builder.Services.AddScoped<IPayPalGateway, PayPalGateway>();
+            builder.Services.AddScoped<PagamentoFaturamento.AntiCorruption.IConfigurationManager, PagamentoFaturamento.AntiCorruption.ConfigurationManager>();
+            builder.Services.AddScoped<PagamentoContext>();
+            
+            builder.Services.AddScoped<INotificationHandler<PedidoMatriculaConfirmadoEvent>, PagamentoEventHandler>();
 
             //Mediator
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
