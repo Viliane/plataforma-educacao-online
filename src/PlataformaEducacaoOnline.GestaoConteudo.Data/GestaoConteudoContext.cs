@@ -20,6 +20,8 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data
         public DbSet<Curso> Cursos { get; set; }
         public DbSet<Aula> Aulas { get; set; }
 
+        public DbSet<EvolucaoAula> EvolucaoAulas { get; set; }
+
         public DbSet<Material> Materiais { get; set; }
 
         public async Task<bool> Commit()

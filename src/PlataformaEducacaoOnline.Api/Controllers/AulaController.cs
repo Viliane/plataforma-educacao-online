@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using PlataformaEducacaoOnline.Api.Controllers.Base;
 using PlataformaEducacaoOnline.Api.DTO;
 using PlataformaEducacaoOnline.Core.DomainObjects;
+using PlataformaEducacaoOnline.Core.DomainObjects.DTO;
+using PlataformaEducacaoOnline.GestaoAluno.Application.Queries;
 using PlataformaEducacaoOnline.GestaoConteudo.Application.Commands;
 using PlataformaEducacaoOnline.GestaoConteudo.Application.Queries;
 using PlataformaEducacaoOnline.GestaoConteudo.Application.Queries.DTO;
@@ -14,11 +16,13 @@ namespace PlataformaEducacaoOnline.Api.Controllers
 {
     [Route("api/aulas")]
     public class AulaController(INotificationHandler<DomainNotification> notificacoes,
-                                  IMediator mediator, ICursoQueries cursoQueries)
+                                  IMediator mediator, ICursoQueries cursoQueries,
+                                  IAlunoQueries alunoQueries)
         : MainController(notificacoes, mediator)
     {
         private readonly IMediator _mediator = mediator;
         private readonly ICursoQueries _cursoQueries = cursoQueries;
+        private readonly IAlunoQueries _alunoQueries = alunoQueries;
 
         [Authorize(Roles = "ADMIN")]
         [HttpPost]
@@ -84,6 +88,52 @@ namespace PlataformaEducacaoOnline.Api.Controllers
         {
             var curso = await _cursoQueries.ObterAulaPorId(id);
             return RetornoPadrao(HttpStatusCode.OK, curso);
+        }
+
+        [Authorize(Roles = "ALUNO")]
+        [HttpPost("realizar-aula")]
+        public async Task<IActionResult> RealizarAula([FromBody] EvolucaoAulaDto evolucaoAulaDto)
+        {
+            var dadosMatricula = await _alunoQueries.ObterMatriculaAlunoIdCursoId(UsuarioId, evolucaoAulaDto.CursoId);
+
+            if (dadosMatricula == null)
+            {
+                return NotFound(new { Sucesso = false, Erros = new[] { "Matrícula não encontrada." } });
+            }
+
+            if ((int)dadosMatricula.Status != (int)StatusMatricula.Ativa)
+            {
+                NotificarErro("Realizar Aula", "Aula ainda não esta disponivel para realização.");
+                return RetornoPadrao();
+            }
+
+            var command = new RealizarAulaCommand(evolucaoAulaDto.AulaId, UsuarioId);
+            await _mediator.Send(command);
+
+            return RetornoPadrao(HttpStatusCode.Created);
+        }
+
+        [Authorize(Roles = "ALUNO")]
+        [HttpPost("concluir-aula")]
+        public async Task<IActionResult> ConcluirAula([FromBody] EvolucaoAulaDto evolucaoAulaDto)
+        {
+            var dadosMatricula = await _alunoQueries.ObterMatriculaAlunoIdCursoId(UsuarioId, evolucaoAulaDto.CursoId);
+
+            if (dadosMatricula == null)
+            {
+                return NotFound(new { Sucesso = false, Erros = new[] { "Matrícula não encontrada." } });
+            }
+
+            if ((int)dadosMatricula.Status != (int)StatusMatricula.Ativa)
+            {
+                NotificarErro("Concluir Aula", "Aula ainda não esta disponivel para conclusão.");
+                return RetornoPadrao();
+            }
+
+            var command = new ConcluirAulaCommand(evolucaoAulaDto.AulaId, UsuarioId);
+            await _mediator.Send(command);
+
+            return RetornoPadrao(HttpStatusCode.Created);
         }
     }
 }

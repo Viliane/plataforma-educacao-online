@@ -89,6 +89,21 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Data.Repository
             _context.Materiais.Remove(material);
         }
 
+        public void AdicionarEvolucaoAula(EvolucaoAula aulaEvolucao)
+        {
+             _context.EvolucaoAulas.Add(aulaEvolucao);
+        }
+
+        public async Task<EvolucaoAula?> ObterEvolucaoAulaPorAulaIdUsuarioId(Guid aulaId, Guid usuarioId)
+        {
+            return await _context.EvolucaoAulas.AsNoTracking().FirstOrDefaultAsync(e => e.AulaId == aulaId && e.UsuarioId == usuarioId);
+        }
+
+        public void Atualizar(EvolucaoAula evolucaoAula)
+        {
+            _context.EvolucaoAulas.Update(evolucaoAula);
+        }
+
         public void Dispose()
         {
             _context?.Dispose();

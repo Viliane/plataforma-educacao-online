@@ -23,5 +23,8 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Domain
         void Atualizar(Aula aula);
         void Remover(Aula aula);
         void Remover(Material material);
+        void AdicionarEvolucaoAula(EvolucaoAula aulaEvolucao);
+        Task<EvolucaoAula?> ObterEvolucaoAulaPorAulaIdUsuarioId(Guid aulaId, Guid usuarioId);
+        void Atualizar(EvolucaoAula evolucaoAula);
     }
 }

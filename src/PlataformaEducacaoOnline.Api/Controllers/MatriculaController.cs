@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using PlataformaEducacaoOnline.Api.Controllers.Base;
 using PlataformaEducacaoOnline.Api.DTO;
 using PlataformaEducacaoOnline.Core.DomainObjects;
+using PlataformaEducacaoOnline.Core.DomainObjects.DTO;
 using PlataformaEducacaoOnline.GestaoAluno.Application.Commands;
 using PlataformaEducacaoOnline.GestaoAluno.Application.Queries;
-using PlataformaEducacaoOnline.GestaoAluno.Domain;
+using PlataformaEducacaoOnline.GestaoConteudo.Application.Commands;
 using PlataformaEducacaoOnline.GestaoConteudo.Application.Queries;
 using PlataformaEducacaoOnline.PagamentoFaturamento.Business;
 using System.Net;
@@ -31,6 +32,12 @@ namespace PlataformaEducacaoOnline.Api.Controllers
         {
             var command = new AdicionarMatriculaCommand(UsuarioId, matricula.CursoId);
             await _mediator.Send(command);
+
+            var aulaCurso = await _cursoQueries.ObterAulasPorCursoId(matricula.CursoId);
+
+            var evolucaoAulaCommand = new EvoluirAulaCommand(UsuarioId, matricula.CursoId, aulaCurso);
+            await _mediator.Send(evolucaoAulaCommand);
+
             return RetornoPadrao(HttpStatusCode.Created);
         }
 

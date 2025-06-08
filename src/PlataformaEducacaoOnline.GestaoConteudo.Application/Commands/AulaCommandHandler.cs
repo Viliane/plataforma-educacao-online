@@ -10,7 +10,10 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands
     public class AulaCommandHandler : IRequestHandler<AdicionarAulaCommand, bool>,
         IRequestHandler<AtualizarAulaCommand, bool>,
         IRequestHandler<RemoverAulaCommand, bool>,
-        IRequestHandler<RemoverMaterialAulaCommand, bool>
+        IRequestHandler<RemoverMaterialAulaCommand, bool>,
+        IRequestHandler<EvoluirAulaCommand, bool>,
+        IRequestHandler<RealizarAulaCommand, bool>,
+        IRequestHandler<ConcluirAulaCommand, bool>
     {
         private readonly ICursoRepositoty _cursoRepository;
         private readonly IMediator _mediator;
@@ -113,6 +116,56 @@ namespace PlataformaEducacaoOnline.GestaoConteudo.Application.Commands
             _cursoRepository.Remover(material);
 
             material.AdicionarEvento(new MaterialAulaRemovidaEvent(material.Id, material.Nome, material.AulaId));
+
+            return await _cursoRepository.UnitOfWork.Commit();
+        }
+
+        public async Task<bool> Handle(EvoluirAulaCommand message, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(message))
+                return false;
+            
+            foreach (var aulaDto in message.AulaCurso)
+            {
+                var evolucaoAula = new EvolucaoAula(aulaDto.Id, message.UsuarioId);
+                _cursoRepository.AdicionarEvolucaoAula(evolucaoAula);
+            }
+
+            return await _cursoRepository.UnitOfWork.Commit();
+        }
+
+        public async Task<bool> Handle(RealizarAulaCommand message, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(message))
+                return false;
+
+            var evolucaoAula = await _cursoRepository.ObterEvolucaoAulaPorAulaIdUsuarioId(message.AulaId, message.UsuarioId);
+            if (evolucaoAula is null)
+            {
+                await _mediator.Publish(new DomainNotification(message.MessageType, "Evolução da aula não encontrada."), cancellationToken);
+                return false;
+            }
+
+            evolucaoAula.AulaEmAndamento();
+            _cursoRepository.Atualizar(evolucaoAula);
+
+            return await _cursoRepository.UnitOfWork.Commit();
+        }
+
+        public async Task<bool> Handle(ConcluirAulaCommand message, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(message))
+                return false;
+
+            var evolucaoAula = await _cursoRepository.ObterEvolucaoAulaPorAulaIdUsuarioId(message.AulaId, message.UsuarioId);
+            if (evolucaoAula is null)
+            {
+                await _mediator.Publish(new DomainNotification(message.MessageType, "Evolução da aula não encontrada."), cancellationToken);
+                return false;
+            }
+
+            evolucaoAula.AulaConcluida();
+            _cursoRepository.Atualizar(evolucaoAula);
 
             return await _cursoRepository.UnitOfWork.Commit();
         }
