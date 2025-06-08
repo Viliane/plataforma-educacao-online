@@ -6,10 +6,19 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Application.Queries
     public class AlunoQueries : IAlunoQueries
     {
         private readonly IAlunoRepository _alunoRepository;
+        private readonly ICertificadoPdfGenerator _certificadoPdfGenerator;
 
-        public AlunoQueries(IAlunoRepository alunoRepository)
+        public AlunoQueries(IAlunoRepository alunoRepository, ICertificadoPdfGenerator certificadoPdfGenerator)
         {
             _alunoRepository = alunoRepository;
+            _certificadoPdfGenerator = certificadoPdfGenerator;
+        }
+
+        public async Task<byte[]> ObterCertificado(Guid matriculaId, Guid usuarioId)
+        {
+            var certificado = await _alunoRepository.ObterCertificadoPorId(matriculaId, usuarioId);
+            var gerador = certificado is null ? Array.Empty<byte>() : certificado.EmitirCertificado(_certificadoPdfGenerator);
+            return gerador;
         }
 
         public async Task<MatriculaQueryDto?> ObterMatriculaAlunoIdCursoId(Guid usuarioId, Guid cursoId)

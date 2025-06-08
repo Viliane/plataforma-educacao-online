@@ -101,6 +101,9 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Application.Commands
             matricula.ConcluirCurso();
             _alunoRepository.Atualizar(matricula);
 
+            var certificado = new Certificado(matricula.Id, message.AlunoId);
+            _alunoRepository.AdicionarCertificado(certificado);
+
             return await _alunoRepository.UnitOfWork.Commit();
         }
 

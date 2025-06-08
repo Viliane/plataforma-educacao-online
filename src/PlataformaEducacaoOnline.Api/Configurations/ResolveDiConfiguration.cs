@@ -67,6 +67,8 @@ namespace PlataformaEducacaoOnline.Api.Configurations
             typeof(EvoluirAulaCommand).Assembly,
             typeof(RealizarAulaCommand).Assembly));
 
+            builder.Services.AddScoped<ICertificadoPdfGenerator, CertificadoPdfGenerator>();
+
             return builder;
         }
     }

@@ -60,9 +60,9 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Data.Repository
             return await _context.Matriculas.AsNoTracking().Where(m => m.AlunoId == alunoId).ToListAsync();
         }
 
-        public async Task<Certificado?> ObterCertificadoPorId(Guid certificadoId)
+        public async Task<Certificado?> ObterCertificadoPorId(Guid matriculaId, Guid alunoId)
         {
-            return await _context.Certificados.AsNoTracking().FirstOrDefaultAsync(c => c.Id == certificadoId);
+            return await _context.Certificados.AsNoTracking().FirstOrDefaultAsync(c => c.MatriculaId == matriculaId && c.AlunoId == alunoId);
         }
 
         public void Atualizar(Matricula matricula)

@@ -9,6 +9,7 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Application.Queries
 {
     public interface IAlunoQueries
     {
+        Task<byte[]> ObterCertificado(Guid id, Guid usuarioId);
         Task<MatriculaQueryDto?> ObterMatriculaAlunoIdCursoId(Guid usuarioId, Guid cursoId);
     }
 }

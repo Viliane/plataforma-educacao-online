@@ -18,13 +18,13 @@ namespace PlataformaEducacaoOnline.Api.Controllers
     public class AlunoController(INotificationHandler<DomainNotification> notificacoes,
                                    IMediator mediator, IAlunoQueries alunoQueries,
                                    ICursoQueries cursoQueries,
-                                   IPagamentoRepository pagamentoRepository)
+                                   IPagamentoRepository pagamentoRepository)                                   
         : MainController(notificacoes, mediator)
     {
         private readonly IMediator _mediator = mediator;
         private readonly IAlunoQueries _alunoQueries = alunoQueries;
         private readonly ICursoQueries _cursoQueries = cursoQueries;
-        private readonly IPagamentoRepository _pagamentoRepository = pagamentoRepository;
+        private readonly IPagamentoRepository _pagamentoRepository = pagamentoRepository;        
 
         [Authorize(Roles = "ALUNO")]
         [HttpPost()]
@@ -139,6 +139,20 @@ namespace PlataformaEducacaoOnline.Api.Controllers
             await _mediator.Send(finalizarCursoCommand);
 
             return RetornoPadrao(HttpStatusCode.OK);
+        }
+
+        [Authorize(Roles = "ALUNO")]
+        [HttpGet("gerar-certificado/{matriculaId:guid}")]
+        public async Task<IActionResult> GerarCertificado(Guid matriculaId)
+        {
+            var certificado = await _alunoQueries.ObterCertificado(matriculaId, UsuarioId);
+
+            if (certificado == null)
+            {
+                return NoContent();
+            }
+
+            return File(certificado, "application/pdf", "certificado.pdf");
         }
     }
 }
