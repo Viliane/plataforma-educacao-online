@@ -15,7 +15,7 @@ using System.Net;
 namespace PlataformaEducacaoOnline.Api.Controllers
 {
     [Route("api/matricula")]
-    public class MatriculaController(INotificationHandler<DomainNotification> notificacoes,
+    public class AlunoController(INotificationHandler<DomainNotification> notificacoes,
                                    IMediator mediator, IAlunoQueries alunoQueries,
                                    ICursoQueries cursoQueries,
                                    IPagamentoRepository pagamentoRepository)
