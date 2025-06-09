@@ -33,16 +33,6 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
             Validar();
         }
 
-        public void SolicitarCertificado()
-        {
-
-        }
-
-        public void RegistrarHistorico()
-        {
-
-        }
-
         public void Validar()
         {
             if(Guid.Empty == Id)

@@ -18,11 +18,5 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
             Descricao = descricao;
             DataRegistro = DateTime.UtcNow;
         }
-
-        public void Validar()
-        {
-            if (string.IsNullOrWhiteSpace(Descricao))
-                throw new DomainException("Descrição do histórico de aprendizado não pode ser vazia ou nula.");
-        }
     }
 }
