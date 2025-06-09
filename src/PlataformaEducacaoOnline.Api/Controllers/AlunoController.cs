@@ -113,7 +113,7 @@ namespace PlataformaEducacaoOnline.Api.Controllers
 
             var transacao = await _pagamentoRepository.ObterTransacaoPorAlunoIdCursoIdMatricula(UsuarioId, curso.Id, dadosMatricula.Id);
 
-            if ((int)transacao.StatusTransacao == (int)StatusTransacao.Pago)
+            if (transacao != null && (int)transacao.StatusTransacao == (int)StatusTransacao.Pago)
             {
                 var AtualizarMatriculaCommand = new AtualizarMatriculaCommand(dadosMatricula.Id);
                 await _mediator.Send(AtualizarMatriculaCommand);
