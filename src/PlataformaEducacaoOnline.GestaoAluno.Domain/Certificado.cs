@@ -35,7 +35,7 @@ namespace PlataformaEducacaoOnline.GestaoAluno.Domain
 
         public byte[] EmitirCertificado(ICertificadoPdfGenerator pdfGenerator)
         {
-            if (pdfGenerator == null) throw new ArgumentNullException(nameof(pdfGenerator));
+            if (pdfGenerator == null) throw new DomainException("O certificado não pode ser gerado");
                 return pdfGenerator.GerarPdf(this);
         }
     }
