@@ -30,3 +30,5 @@ app.MapControllers();
 app.UseDbMigrationHelper();
 
 app.Run();
+
+public partial class Program { }
