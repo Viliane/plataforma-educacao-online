@@ -1,10 +1,7 @@
-﻿using Bogus.Bson;
-using PlataformaEducacaoOnline.Api.DTO;
+﻿using PlataformaEducacaoOnline.Api.DTO;
 using PlataformaEducacaoOnline.Api.Tests.Config;
 using PlataformaEducacaoOnline.Api.Tests.DTO;
-using PlataformaEducacaoOnline.GestaoConteudo.Application.Queries.DTO;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace PlataformaEducacaoOnline.Api.Tests
 {

@@ -1,5 +1,7 @@
 ﻿using PlataformaEducacaoOnline.Api.DTO;
 using PlataformaEducacaoOnline.Api.Tests.Config;
+using PlataformaEducacaoOnline.Api.Tests.DTO;
+using PlataformaEducacaoOnline.GestaoConteudo.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -89,7 +91,7 @@ namespace PlataformaEducacaoOnline.Api.Tests
         public async Task Aluno_RealizarPagamento_DeveRetornarComSucesso()
         {
             _testsfixture.Client.AtribuirBearerToken(_testsfixture.TokenUsuario);
-            _testsfixture.GerarDadosCartao(); 
+            _testsfixture.GerarDadosCartao();
 
             // Arrange  
             var dadosPagamento = new PagamentoMatriculaDto
@@ -105,6 +107,104 @@ namespace PlataformaEducacaoOnline.Api.Tests
 
             // Act
             var postResponse = await _testsfixture.Client.PostAsJsonAsync("api/matricula/realizar-pagamento", dadosPagamento);
+
+            //Assert
+            postResponse.EnsureSuccessStatusCode();
+        }
+
+        [Fact(DisplayName = "Realizar aula do aluno com Sucesso"), TestPriority(9)]
+        [Trait("Categoria", "Aluno")]
+        public async Task Aluno_RealizarAula_DeveRetornarComSucesso()
+        {
+            // Arrange  
+            _testsfixture.Client.AtribuirBearerToken(_testsfixture.TokenUsuario);
+            var response = await _testsfixture.Client.GetAsync("api/aulas");
+            var aulas = await response.Content.ReadFromJsonAsync<AulaTestDto>();
+            foreach (var item in aulas.data)
+            {
+                if (item.cursoId == _testsfixture.CursoId)
+                {
+                    var evolucaoAula = new EvolucaoAulaDto
+                    {
+                        CursoId = _testsfixture.CursoId,
+                        AulaId = item.id,
+                    };
+
+                    // Act
+                    var postResponse = await _testsfixture.Client.PostAsJsonAsync("api/aulas/realizar-aula", evolucaoAula);
+
+                    //Assert
+                    postResponse.EnsureSuccessStatusCode();
+                }
+            }
+        }
+
+        [Fact(DisplayName = "Concluir aula do aluno com Sucesso"), TestPriority(10)]
+        [Trait("Categoria", "Aluno")]
+        public async Task Aluno_ConcluirAula_DeveRetornarComSucesso()
+        {
+            // Arrange
+            _testsfixture.Client.AtribuirBearerToken(_testsfixture.TokenUsuario);
+
+            var response = await _testsfixture.Client.GetAsync("api/aulas");
+            var aulas = await response.Content.ReadFromJsonAsync<AulaTestDto>();
+
+            foreach (var item in aulas.data)
+            {
+                if (item.cursoId == _testsfixture.CursoId)
+                {
+                    var evolucaoAula = new EvolucaoAulaDto
+                    {
+                        CursoId = _testsfixture.CursoId,
+                        AulaId = item.id,
+                    };
+
+                    // Act
+                    var postResponse = await _testsfixture.Client.PostAsJsonAsync("api/aulas/concluir-aula", evolucaoAula);
+
+                    //Assert
+                    postResponse.EnsureSuccessStatusCode();
+                }
+            }
+        }
+
+        [Fact(DisplayName = "Aluno conclui o curso com Sucesso"), TestPriority(11)]
+        [Trait("Categoria", "Aluno")]
+        public async Task Aluno_FinalizaCurso_DeveRetornarComSucesso()
+        {
+            // Arrange
+            _testsfixture.Client.AtribuirBearerToken(_testsfixture.TokenUsuario);
+            var dados = new MatriculaDto
+            {
+                CursoId = _testsfixture.CursoId,
+                AlunoId = _testsfixture.UsuarioId,
+            };
+
+            // Act
+            var postResponse = await _testsfixture.Client.PostAsJsonAsync("api/matricula/finalizar-curso", dados);
+
+            //Assert
+            postResponse.EnsureSuccessStatusCode();
+        }
+
+        [Fact(DisplayName = "Aluno gera certificado com Sucesso"), TestPriority(12)]
+        [Trait("Categoria", "Aluno")]
+        public async Task Aluno_GerarCertificado_DeveRetornarComSucesso()
+        {
+            // Arrange
+            _testsfixture.Client.AtribuirBearerToken(_testsfixture.TokenUsuario);
+
+            var matriculaDto = new MatriculaDto
+            {
+                CursoId = _testsfixture.CursoId,
+                AlunoId = _testsfixture.UsuarioId
+            };
+
+            var response = await _testsfixture.Client.PostAsJsonAsync("api/matricula/resumo-matricula", matriculaDto);
+            var matricula = await response.Content.ReadFromJsonAsync<ResumoTestDto>();
+
+            // Act
+            var postResponse = await _testsfixture.Client.GetAsync($"/api/matricula/gerar-certificado/{matricula.data.matricula}");
 
             //Assert
             postResponse.EnsureSuccessStatusCode();

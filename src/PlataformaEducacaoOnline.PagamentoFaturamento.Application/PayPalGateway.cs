@@ -11,7 +11,8 @@ namespace PlataformaEducacaoOnline.PagamentoFaturamento.AntiCorruption
     {
         public bool CommitTransaction(string cardHashKey, string orderId, decimal amount)
         {
-            return new Random().Next(0, 2) == 1;
+            //return new Random().Next(0, 2) == 1;
+            return true;
         }
 
         public string GetCardHashKey(string serviceKey, string cartaoCredito)
