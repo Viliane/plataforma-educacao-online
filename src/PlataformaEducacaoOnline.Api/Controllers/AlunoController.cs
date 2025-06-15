@@ -18,13 +18,13 @@ namespace PlataformaEducacaoOnline.Api.Controllers
     public class AlunoController(INotificationHandler<DomainNotification> notificacoes,
                                    IMediator mediator, IAlunoQueries alunoQueries,
                                    ICursoQueries cursoQueries,
-                                   IPagamentoRepository pagamentoRepository)                                   
+                                   IPagamentoRepository pagamentoRepository)
         : MainController(notificacoes, mediator)
     {
         private readonly IMediator _mediator = mediator;
         private readonly IAlunoQueries _alunoQueries = alunoQueries;
         private readonly ICursoQueries _cursoQueries = cursoQueries;
-        private readonly IPagamentoRepository _pagamentoRepository = pagamentoRepository;        
+        private readonly IPagamentoRepository _pagamentoRepository = pagamentoRepository;
 
         [Authorize(Roles = "ALUNO")]
         [HttpPost()]
@@ -125,8 +125,8 @@ namespace PlataformaEducacaoOnline.Api.Controllers
         [Authorize(Roles = "ALUNO")]
         [HttpPost("finalizar-curso")]
         public async Task<IActionResult> FinalizarCurso([FromBody] MatriculaDto matricula)
-        {  
-            var evolucaoAula = await _cursoQueries.ObterEvolucaoAulaPorUsuarioIdCursoId(UsuarioId, matricula.CursoId);            
+        {
+            var evolucaoAula = await _cursoQueries.ObterEvolucaoAulaPorUsuarioIdCursoId(UsuarioId, matricula.CursoId);
             var todasAulasConcluidas = evolucaoAula != null && evolucaoAula.All(a => a.Status == (int)StatusAula.Concluida);
 
             if (!todasAulasConcluidas)
@@ -147,7 +147,7 @@ namespace PlataformaEducacaoOnline.Api.Controllers
         {
             var certificado = await _alunoQueries.ObterCertificado(matriculaId, UsuarioId);
 
-            if (certificado == null)
+            if (certificado.Length == 0)
             {
                 return NoContent();
             }
