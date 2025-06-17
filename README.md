@@ -1,4 +1,4 @@
-# **[plataforma-educacao-online] - Plataforma de Educação Online**
+# **[PEO] - Plataforma de Educação Online**
 
 ## **1. Apresentação**
 
